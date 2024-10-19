@@ -5,7 +5,10 @@ export default function Home() {
         <div>
             <header>
                 <div>
-                    
+                    <Grid2X2 />
+                </div>
+                <div>
+                    <Settings />
                 </div>
             </header>
 
