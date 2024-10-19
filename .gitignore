@@ -1,3 +1,6 @@
 .env
 node_modules
 target
+
+# Python3 virtual env
+.venv
