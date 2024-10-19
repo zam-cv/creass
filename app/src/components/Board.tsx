@@ -11,6 +11,7 @@ interface PostitPosition {
 
 export default function Board() {
   const [postitPositions, setPostitPositions] = useState<PostitPosition[]>([]);
+  const [messageSent, setMessageSent] = useState(false);
 
   const predefinedConfigurations = [
     // Configuración 1
@@ -18,7 +19,7 @@ export default function Board() {
       { x: 100, y: 100 },
       { x: 300, y: 300 },
       { x: 800, y: 50 },
-      { x: 900, y: 400 },
+      { x: 900, y: 450 },
       { x: 1200, y: 100 },
     ],
     // Configuración 2
@@ -27,14 +28,14 @@ export default function Board() {
       { x: 1300, y: 50 },
       { x: 1200, y: 450 },
       { x: 300, y: 10 },
-      { x: 650, y: 450 },
+      { x: 650, y: 500 },
     ],
     // Configuración 3
     [
       { x: 200, y: 50 },
       { x: 1250, y: 350 },
       { x: 100, y: 350 },
-      { x: 600, y: 400 },
+      { x: 600, y: 450 },
       { x: 1300, y: 10 },
     ],
     // Configuración 4
@@ -57,7 +58,7 @@ export default function Board() {
     [
       { x: 20, y: 20 },
       { x: 600, y: 40 },
-      { x: 1000, y: 400 },
+      { x: 1000, y: 450 },
       { x: 1300, y: 100 },
       { x: 250, y: 450 },
     ],
@@ -73,7 +74,7 @@ export default function Board() {
     [
       { x: 150, y: 50 },
       { x: 1400, y: 30 },
-      { x: 900, y: 400 },
+      { x: 900, y: 450 },
       { x: 650, y: 0 },
       { x: 300, y: 450 },
     ],
@@ -83,7 +84,7 @@ export default function Board() {
       { x: 700, y: 30 },
       { x: 1300, y: 150 },
       { x: 200, y: 10 },
-      { x: 600, y: 400 },
+      { x: 600, y: 450 },
     ],
     // Configuración 10
     [
@@ -96,13 +97,11 @@ export default function Board() {
   ];
 
   const generatePostitPositions = () => {
-    // Elegimos una configuración aleatoria de las 10
     const randomIndex = Math.floor(
       Math.random() * predefinedConfigurations.length
     );
     const selectedConfiguration = predefinedConfigurations[randomIndex];
 
-    // Asignamos las posiciones a los Post-Its
     const postitPositions = selectedConfiguration.map((position, index) => ({
       id: index,
       ...position,
@@ -111,29 +110,38 @@ export default function Board() {
     setPostitPositions(postitPositions);
   };
 
+  const handleSendMessage = (message: string) => {
+    if (message.trim() !== "") {
+      setMessageSent(true);
+      generatePostitPositions();
+    }
+  };
+
   useEffect(() => {
-    generatePostitPositions(); // Genera las posiciones de Post-Its al cargar la página
+    generatePostitPositions();
   }, []);
 
   return (
-    <div className="relative w-full h-[80vh]">
+    <div className="relative w-full h-[92vh]">
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <div className="text-xl mb-4">
           <h1 className="font-handlee">CreAss</h1>
         </div>
-        <TextField />
+        <TextField onSendMessage={handleSendMessage} />
       </div>
-      {postitPositions.map((position) => (
-        <Draggable
-          key={position.id}
-          defaultPosition={{ x: position.x, y: position.y }}
-          bounds="parent"
-        >
-          <div className="absolute">
-            <PostIt title="{}" />
-          </div>
-        </Draggable>
-      ))}
+
+      {messageSent &&
+        postitPositions.map((position) => (
+          <Draggable
+            key={position.id}
+            defaultPosition={{ x: position.x, y: position.y }}
+            bounds="parent"
+          >
+            <div className="absolute">
+              <PostIt title="{}" />
+            </div>
+          </Draggable>
+        ))}
     </div>
   );
 }
