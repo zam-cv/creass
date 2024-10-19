@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Settings, LayoutGrid } from "lucide-react";
 import MyProjects from "./MyProjects";
+import CloseButton from "../components/ui/CloseButton"; // Importar el nuevo componente
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,7 +33,10 @@ export default function Home() {
       <body></body>
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <MyProjects />
+          <div className="relative bg-gray-300 p-10 rounded-lg">
+            <CloseButton onClick={handleCloseModal} />
+            <MyProjects />
+          </div>
         </div>
       )}
     </div>
