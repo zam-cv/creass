@@ -17,7 +17,7 @@ export default function Home() {
 
   return (
     <div>
-      <header className="h-[8vh] bg-red-500">
+      <header className="h-[8vh]">
         <div className="flex justify-between">
           <div className="order-first pl-5 pt-3">
             <LayoutGrid
