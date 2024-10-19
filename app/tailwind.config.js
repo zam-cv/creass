@@ -5,6 +5,7 @@ export default {
     extend: {
       colors: {
         postIt: "#FFF1C1",
+        newPostIt: "#B0A88E",
         textfield: "#D9D9D9",
       },
       fontFamily: {

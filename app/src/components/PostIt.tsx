@@ -1,11 +1,11 @@
-import React from "react";
+interface PostItProps {
+  title: string;
+}
 
-const PostIt: React.FC = () => {
+export default function PostIt({ title }: PostItProps) {
   return (
-    <div className="bg-postIt w-48 h-48 rounded-md shadow-lg p-4 flex items-center justify-center">
-      {/* <p className="text-gray-700 text-center">This is a Post-it note!</p> */}
+    <div className="w-48 h-48 bg-postIt rounded-lg flex justify-center items-center shadow-lg">
+      <span className="text-center">{title}</span>
     </div>
   );
-};
-
-export default PostIt;
+}
