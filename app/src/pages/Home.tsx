@@ -19,7 +19,7 @@ const HomeContent: React.FC = () => {
   };
 
   return (
-    <div className={`${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
+    <div className={`${theme === 'dark' ? 'bg-darkMode text-black' : 'bg-white text-black'}`}>
       <header className="h-[8vh]">
         <div className="flex justify-between">
           <div className="order-first pl-5 pt-3">
@@ -27,6 +27,7 @@ const HomeContent: React.FC = () => {
               size={35}
               onClick={handleOpenModal}
               className="cursor-pointer"
+              color={theme === 'dark' ? 'white' : 'black'}
             />
           </div>
           <div className="order-last pr-5 pt-3">
@@ -41,7 +42,7 @@ const HomeContent: React.FC = () => {
       </main>
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className={`relative ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-300'} p-10 rounded-lg`}>
+          <div className={`relative ${theme === 'dark' ? 'bg-darkMode' : 'bg-gray-300'} p-10 rounded-lg`}>
             <CloseButton onClick={handleCloseModal} />
             <MyProjects />
           </div>
