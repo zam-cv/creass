@@ -11,86 +11,111 @@ interface PostitPosition {
 export default function Board() {
   const [postitPositions, setPostitPositions] = useState<PostitPosition[]>([]);
 
-  const checkCollision = (
-    x: number,
-    y: number,
-    positions: PostitPosition[],
-    textFieldArea: { x: number; y: number; width: number; height: number }
-  ): boolean => {
-    const postitSize = 192; // 48px * 4 (w-48 en Tailwind es 12rem, que son 192px)
+  const predefinedConfigurations = [
+    // Configuración 1
+    [
+      { x: 100, y: 100 },
+      { x: 300, y: 300 },
+      { x: 800, y: 50 },
+      { x: 900, y: 400 },
+      { x: 1200, y: 100 },
+    ],
+    // Configuración 2
+    [
+      { x: 150, y: 250 },
+      { x: 1300, y: 50 },
+      { x: 1200, y: 450 },
+      { x: 300, y: 10 },
+      { x: 650, y: 450 },
+    ],
+    // Configuración 3
+    [
+      { x: 200, y: 50 },
+      { x: 1250, y: 350 },
+      { x: 100, y: 350 },
+      { x: 600, y: 400 },
+      { x: 1300, y: 10 },
+    ],
+    // Configuración 4
+    [
+      { x: 50, y: 100 },
+      { x: 850, y: 450 },
+      { x: 900, y: 10 },
+      { x: 1400, y: 250 },
+      { x: 300, y: 400 },
+    ],
+    // Configuración 5
+    [
+      { x: 100, y: 50 },
+      { x: 600, y: 10 },
+      { x: 1250, y: 350 },
+      { x: 1300, y: 20 },
+      { x: 150, y: 450 },
+    ],
+    // Configuración 6
+    [
+      { x: 20, y: 20 },
+      { x: 600, y: 40 },
+      { x: 1000, y: 400 },
+      { x: 1300, y: 100 },
+      { x: 250, y: 450 },
+    ],
+    // Configuración 7
+    [
+      { x: 50, y: 100 },
+      { x: 400, y: 350 },
+      { x: 1250, y: 200 },
+      { x: 700, y: 50 },
+      { x: 100, y: 400 },
+    ],
+    // Configuración 8
+    [
+      { x: 150, y: 50 },
+      { x: 1400, y: 30 },
+      { x: 900, y: 400 },
+      { x: 650, y: 0 },
+      { x: 300, y: 450 },
+    ],
+    // Configuración 9
+    [
+      { x: 50, y: 300 },
+      { x: 700, y: 30 },
+      { x: 1300, y: 150 },
+      { x: 200, y: 10 },
+      { x: 600, y: 400 },
+    ],
+    // Configuración 10
+    [
+      { x: 150, y: 50 },
+      { x: 600, y: 450 },
+      { x: 1300, y: 150 },
+      { x: 900, y: 0 },
+      { x: 250, y: 350 },
+    ],
+  ];
 
-    // Comprobar colisión con el TextField
-    if (
-      x < textFieldArea.x + textFieldArea.width &&
-      x + postitSize > textFieldArea.x &&
-      y < textFieldArea.y + textFieldArea.height &&
-      y + postitSize > textFieldArea.y
-    ) {
-      return true; // Colisión con TextField
-    }
+  const generatePostitPositions = () => {
+    // Elegimos una configuración aleatoria de las 10
+    const randomIndex = Math.floor(
+      Math.random() * predefinedConfigurations.length
+    );
+    const selectedConfiguration = predefinedConfigurations[randomIndex];
 
-    // Comprobar colisión con otros PostIts
-    for (let position of positions) {
-      if (
-        x < position.x + postitSize &&
-        x + postitSize > position.x &&
-        y < position.y + postitSize &&
-        y + postitSize > position.y
-      ) {
-        return true; // Colisión con otro PostIt
-      }
-    }
-    return false; // No hay colisión
-  };
+    // Asignamos las posiciones a los Post-Its
+    const postitPositions = selectedConfiguration.map((position, index) => ({
+      id: index,
+      ...position,
+    }));
 
-  const generateRandomPostits = (count: number) => {
-    const newPositions: PostitPosition[] = [];
-    const textFieldWidth = 300; // Ancho estimado del TextField
-    const textFieldHeight = 50; // Altura estimada del TextField
-    const postitSize = 192; // 48px * 4 (w-48 en Tailwind es 12rem, que son 192px)
-    const margin = 20; // Margen para evitar que los postits toquen los bordes
-
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
-
-    const textFieldArea = {
-      x: centerX - textFieldWidth / 2,
-      y: centerY - textFieldHeight / 2,
-      width: textFieldWidth,
-      height: textFieldHeight,
-    };
-
-    let attempts = 0;
-    const maxAttempts = 100; // Límite de intentos para evitar bucles infinitos
-
-    for (let i = 0; i < count && attempts < maxAttempts; i++) {
-      let x, y;
-      let collision;
-      do {
-        x =
-          Math.random() * (window.innerWidth - postitSize - margin * 2) +
-          margin;
-        y =
-          Math.random() * (window.innerHeight - postitSize - margin * 2) +
-          margin;
-        collision = checkCollision(x, y, newPositions, textFieldArea);
-        attempts++;
-      } while (collision && attempts < maxAttempts);
-
-      if (!collision) {
-        newPositions.push({ id: i, x, y });
-        attempts = 0; // Resetear intentos para el siguiente PostIt
-      }
-    }
-    setPostitPositions(newPositions);
+    setPostitPositions(postitPositions);
   };
 
   useEffect(() => {
-    generateRandomPostits(5); // Genera 5 postits al cargar el componente
+    generatePostitPositions(); // Genera las posiciones de Post-Its al cargar la página
   }, []);
 
   return (
-    <div className="relative w-full h-screen">
+    <div className="relative w-full h-[80vh]">
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <div className="text-xl mb-4">
           <h1 className="font-handlee">CreAss</h1>
