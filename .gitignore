@@ -4,3 +4,6 @@ target
 
 # Python3 virtual env
 .venv
+
+# FastAPI Cache
+__pycache__
