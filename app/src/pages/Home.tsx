@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Settings, LayoutGrid } from "lucide-react";
 import MyProjects from "./MyProjects";
+import Board from "../components/Board";
+import CloseButton from "../components/ui/CloseButton";
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
