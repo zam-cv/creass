@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Settings, LayoutGrid } from "lucide-react";
+import { Settings, LayoutGrid, Move3D } from "lucide-react";
 import MyProjects from "./MyProjects";
 import Board from "../components/Board";
 import CloseButton from "../components/ui/CloseButton";
+import ModeSwitch from "../components/ui/ModeSwitch";
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,7 +28,8 @@ export default function Home() {
             />
           </div>
           <div className="order-last pr-5 pt-3">
-            <Settings size={35} />
+            {/* <Settings size={35} /> */}
+            <ModeSwitch />
           </div>
         </div>
       </header>
