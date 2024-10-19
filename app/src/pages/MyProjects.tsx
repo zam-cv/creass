@@ -1,6 +1,6 @@
 import PostIt from "../components/PostIt";
 
-function App() {
+function MyProjects() {
   return (
     <div>
       <PostIt />
@@ -8,4 +8,4 @@ function App() {
   );
 }
 
-export default App;
+export default MyProjects;

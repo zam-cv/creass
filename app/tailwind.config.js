@@ -6,6 +6,9 @@ export default {
       colors: {
         postIt: "#FFF1C1",
       },
+      fontFamily: {
+        handlee: ["Handlee", "cursive"],
+      },
     },
   },
   plugins: [],
