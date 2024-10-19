@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import TextField from "./ui/Textfield";
 import PostIt from "./PostIt";
 
@@ -11,9 +11,14 @@ interface PostitPosition {
 export default function Board() {
   const [postitPositions, setPostitPositions] = useState<PostitPosition[]>([]);
 
-  const checkCollision = (x: number, y: number, positions: PostitPosition[], textFieldArea: {x: number, y: number, width: number, height: number}): boolean => {
+  const checkCollision = (
+    x: number,
+    y: number,
+    positions: PostitPosition[],
+    textFieldArea: { x: number; y: number; width: number; height: number }
+  ): boolean => {
     const postitSize = 192; // 48px * 4 (w-48 en Tailwind es 12rem, que son 192px)
-    
+
     // Comprobar colisión con el TextField
     if (
       x < textFieldArea.x + textFieldArea.width &&
@@ -23,7 +28,7 @@ export default function Board() {
     ) {
       return true; // Colisión con TextField
     }
-    
+
     // Comprobar colisión con otros PostIts
     for (let position of positions) {
       if (
@@ -47,12 +52,12 @@ export default function Board() {
 
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
-    
+
     const textFieldArea = {
       x: centerX - textFieldWidth / 2,
       y: centerY - textFieldHeight / 2,
       width: textFieldWidth,
-      height: textFieldHeight
+      height: textFieldHeight,
     };
 
     let attempts = 0;
@@ -62,8 +67,12 @@ export default function Board() {
       let x, y;
       let collision;
       do {
-        x = Math.random() * (window.innerWidth - postitSize - margin * 2) + margin;
-        y = Math.random() * (window.innerHeight - postitSize - margin * 2) + margin;
+        x =
+          Math.random() * (window.innerWidth - postitSize - margin * 2) +
+          margin;
+        y =
+          Math.random() * (window.innerHeight - postitSize - margin * 2) +
+          margin;
         collision = checkCollision(x, y, newPositions, textFieldArea);
         attempts++;
       } while (collision && attempts < maxAttempts);
@@ -94,7 +103,7 @@ export default function Board() {
           className="absolute"
           style={{ left: `${position.x}px`, top: `${position.y}px` }}
         >
-          <PostIt title='{}'/>
+          <PostIt title="{}" />
         </div>
       ))}
     </div>
