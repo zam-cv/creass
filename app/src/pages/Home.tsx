@@ -17,7 +17,7 @@ export default function Home() {
 
   return (
     <div>
-      <header>
+      <header className="h-[60px]">
         <div className="flex justify-between">
           <div className="order-first pl-5 pt-3">
             <LayoutGrid
@@ -32,7 +32,7 @@ export default function Home() {
         </div>
       </header>
       <body>
-        <div className="flex items-center justify-center min-h-screen">
+        <div className="flex items-center justify-center min-h-[80vh]">
           <Board />
         </div>
       </body>
