@@ -1,12 +1,14 @@
-import { useState } from "react";
-import { Settings, LayoutGrid, Move3D } from "lucide-react";
+import React, { useState } from "react";
+import { LayoutGrid } from "lucide-react";
 import MyProjects from "./MyProjects";
 import Board from "../components/Board";
 import CloseButton from "../components/ui/CloseButton";
-import ModeSwitch from "../components/ui/ModeSwitch";
+import ThemeSwitch from "../components/ui/ThemeSwitch";
+import { ThemeProvider, useTheme } from "../contexts/themeContext";
 
-export default function Home() {
+const HomeContent: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { theme } = useTheme();
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -17,7 +19,7 @@ export default function Home() {
   };
 
   return (
-    <div>
+    <div className={`${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
       <header className="h-[8vh]">
         <div className="flex justify-between">
           <div className="order-first pl-5 pt-3">
@@ -28,19 +30,18 @@ export default function Home() {
             />
           </div>
           <div className="order-last pr-5 pt-3">
-            {/* <Settings size={35} /> */}
-            <ModeSwitch />
+            <ThemeSwitch />
           </div>
         </div>
       </header>
-      <body>
+      <main>
         <div className="flex items-center justify-center min-h-[92vh]">
           <Board />
         </div>
-      </body>
+      </main>
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="relative bg-gray-300 p-10 rounded-lg">
+          <div className={`relative ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-300'} p-10 rounded-lg`}>
             <CloseButton onClick={handleCloseModal} />
             <MyProjects />
           </div>
@@ -48,4 +49,14 @@ export default function Home() {
       )}
     </div>
   );
-}
+};
+
+const Home: React.FC = () => {
+  return (
+    <ThemeProvider>
+      <HomeContent />
+    </ThemeProvider>
+  );
+};
+
+export default Home;

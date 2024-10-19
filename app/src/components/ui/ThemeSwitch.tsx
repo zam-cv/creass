@@ -1,13 +1,20 @@
-import React from "react";
+import React from 'react';
+import { useTheme } from '../../contexts/themeContext';
 import styled from "styled-components";
 
-const Switch = () => {
+const ThemeSwitch: React.FC = () => {
+  const { theme, toggleTheme } = useTheme();
+
   return (
     <StyledWrapper>
-      <label className="switch">
-        <input type="checkbox" />
-        <span className="slider" />
-      </label>
+    <label className="switch">
+      <input
+        type="checkbox"
+        checked={theme === 'dark'}
+        onChange={toggleTheme}
+      />
+      <span className="slider round"></span>
+    </label>
     </StyledWrapper>
   );
 };
@@ -66,4 +73,4 @@ input:checked + .slider:before {
 }
 `;
 
-export default Switch;
+export default ThemeSwitch;
