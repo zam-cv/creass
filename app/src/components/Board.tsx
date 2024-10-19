@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import TextField from "./ui/Textfield";
 import PostIt from "./PostIt";
+import Draggable from "react-draggable";
 
 interface PostitPosition {
   id: number;
@@ -123,13 +124,15 @@ export default function Board() {
         <TextField />
       </div>
       {postitPositions.map((position) => (
-        <div
+        <Draggable
           key={position.id}
-          className="absolute"
-          style={{ left: `${position.x}px`, top: `${position.y}px` }}
+          defaultPosition={{ x: position.x, y: position.y }}
+          bounds="parent"
         >
-          <PostIt title="{}" />
-        </div>
+          <div className="absolute">
+            <PostIt title="{}" />
+          </div>
+        </Draggable>
       ))}
     </div>
   );
