@@ -66,6 +66,7 @@ async def handle_client(websocket: WebSocket, client_id: int):
 
             for i, prompt in enumerate(list_prompts):
                 await websocket.send_text(prompt)
+                await websocket.send_text('$')
                 if i == 5:
                     break
 
