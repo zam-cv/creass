@@ -13,6 +13,8 @@ interface PostitPosition {
 const BoardContent: React.FC = () => {
   const [postitPositions, setPostitPositions] = useState<PostitPosition[]>([]);
   const [messageSent, setMessageSent] = useState(false);
+  const { theme } = useTheme();
+  console.log("Current theme:", theme);
 
   const predefinedConfigurations = [
     // Configuración 1
@@ -120,28 +122,27 @@ const BoardContent: React.FC = () => {
 
   useEffect(() => {
     generatePostitPositions();
-  }, []);
-
-  const {theme} = useTheme();
+  }, [theme]);
 
   return (
-    <div className={`relative w-full h-[92vh] `}>
+    <div className="relative w-full h-[92vh]">
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <div className="text-xl mb-4">
-        <h1 className={`font-handlee ${
-                theme === "dark" ? "text-white" : "text-black"
-              } `}>
-    CreAss
-        </h1>
-
+          <h1
+            className={`font-handlee text-3xl ${
+              theme === "dark" ? "text-white" : "text-black"
+            }`}
+          >
+            Cre-As
+          </h1>
         </div>
         <TextField onSendMessage={handleSendMessage} />
       </div>
 
       {messageSent &&
-        postitPositions.map((position) => (
+        postitPositions.map((position, index) => (
           <Draggable
-            key={position.id}
+            key={index}
             defaultPosition={{ x: position.x, y: position.y }}
             bounds="parent"
           >
@@ -154,11 +155,4 @@ const BoardContent: React.FC = () => {
   );
 };
 
-const Board: React.FC = () => {
-    return (
-        <ThemeProvider>
-            <BoardContent />
-        </ThemeProvider>
-    );
-};
-export default Board;
+export default BoardContent;
