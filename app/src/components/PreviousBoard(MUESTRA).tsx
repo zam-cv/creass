@@ -28,8 +28,6 @@ function saveLog(message: string) {
   console.log(message);
 }
 
-let nextNodeId = Number(localStorage.getItem("nextNodeId") || 1);
-
 const BoardContent: React.FC = () => {
   const [postitPositions, setPostitPositions] = useState<PostitPosition[]>([]);
   const [messageSent, setMessageSent] = useState(false);
@@ -39,7 +37,7 @@ const BoardContent: React.FC = () => {
   const [selectedNodeId, setSelectedNodeId] = useState<number | null>(null);
   const [treeData, setTreeData] = useState<Node | null>(null);
 
-  // Info muestra
+  // Información de muestra
   const sampleData = [
     "Idea 1: Improve user interface",
     "Idea 2: Implement new features",
@@ -137,12 +135,12 @@ const BoardContent: React.FC = () => {
     );
     const selectedConfiguration = predefinedConfigurations[randomIndex];
 
-    const postitPositions = selectedConfiguration.map((position, index) => ({
+    const positions = selectedConfiguration.map((position, index) => ({
       id: index,
       ...position,
     }));
 
-    setPostitPositions(postitPositions);
+    setPostitPositions(positions);
   };
 
   const handleSendMessage = (message: string) => {
@@ -150,19 +148,20 @@ const BoardContent: React.FC = () => {
       const selectedProject = localStorage.getItem("selectedProject");
 
       if (!selectedProject) {
+        // Crear nuevo proyecto
         const storedProjects = localStorage.getItem("projects");
         const projects = storedProjects ? JSON.parse(storedProjects) : [];
 
         const newProjectName = message;
         const updatedProjects = [...projects, newProjectName];
 
-        const newTreeRoot = {
-          id: nextNodeId++,
+        const newTreeRoot: Node = {
+          id: Date.now(),
           context: newProjectName,
           children: [],
         };
-        localStorage.setItem("nextNodeId", String(nextNodeId));
 
+        // Guardamos el nuevo árbol sin hijos por ahora
         localStorage.setItem("tree", JSON.stringify(newTreeRoot));
         localStorage.setItem("projects", JSON.stringify(updatedProjects));
         localStorage.setItem("selectedProject", newProjectName);
@@ -172,7 +171,6 @@ const BoardContent: React.FC = () => {
         setSelectedNodeId(newTreeRoot.id);
         setIsHome(false);
         setMessageSent(false);
-        window.location.reload();
       } else {
         // Añadir al nodo seleccionado
         const loadedTree = localStorage.getItem("tree");
@@ -182,13 +180,12 @@ const BoardContent: React.FC = () => {
 
           const addChildrenToNode = (node: Node) => {
             if (node.id === selectedNodeId) {
-              sampleData.forEach((text) => {
+              sampleData.forEach((text, index) => {
                 const childNode: Node = {
-                  id: nextNodeId++,
+                  id: Date.now() + index + 1,
                   context: text,
                   children: [],
                 };
-                localStorage.setItem("nextNodeId", String(nextNodeId));
                 node.children.push(childNode);
                 saveLog("Adding Post-It to node: " + text);
               });
@@ -212,44 +209,31 @@ const BoardContent: React.FC = () => {
     setProjectTitle(postItText);
     setPostitPositions([]);
     setSelectedNodeId(nodeId);
+    setMessageSent(false);
   };
 
+  // useEffect para cargar el árbol al montar el componente
   useEffect(() => {
     const storedTree = localStorage.getItem("tree");
     if (storedTree) {
       const parsedTree = JSON.parse(storedTree);
       setTreeData(parsedTree);
       if (isHome) {
+        setProjectTitle(parsedTree.context);
         setSelectedNodeId(parsedTree.id);
         setIsHome(false);
       }
     }
   }, []);
 
-  useEffect(() => {
-    const selectedProject = localStorage.getItem("selectedProject");
-    if (!selectedProject) {
-      setIsHome(true);
-    } else {
-      setIsHome(false);
-    }
-
-    if (!isHome || messageSent) {
-      generatePostitPositions();
-    }
-
-    const storedTree = localStorage.getItem("tree");
-    if (storedTree) {
-      setTreeData(JSON.parse(storedTree));
-    }
-  }, [theme, messageSent]);
-
+  // useEffect para generar posiciones cuando cambia messageSent
   useEffect(() => {
     if (messageSent) {
       generatePostitPositions();
     }
   }, [messageSent]);
 
+  // Función para obtener los Post-its del nodo seleccionado
   const getCurrentPostIts = () => {
     const postIts: Node[] = [];
 
