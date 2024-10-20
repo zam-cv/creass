@@ -46,20 +46,20 @@ cd creass
 
 ## Pasos para correr el servidor
 
-ingresa a la carpeta backend/api
+Ingresa a la carpeta backend/api
 
 ```bash
 cd backend/api
 ```
 
-instala dependencias de python
+Instala dependencias de python
 
 
 ```bash
 pip install -r requirements.txt
 ```
 
-corre el servidor
+Corre el servidor
 
 
 ```bash
@@ -68,4 +68,25 @@ fastapi run app.py
 
 ```bash
 pip install pyoxidizer
+```
+
+## Pasos para correr la aplcacion
+
+Abre otra terminal en el proyecto raiz e ingresa a la carpeta de app
+
+
+```bash
+cd app
+```
+
+Descarga las dependencias de node
+
+```bash
+npm install
+```
+
+Corre la aplicacion
+
+```bash
+npm run tauri dev
 ```
