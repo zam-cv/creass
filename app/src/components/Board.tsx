@@ -4,7 +4,6 @@ import PostIt from "./PostIt";
 import Draggable from "react-draggable";
 import { useTheme } from "../contexts/ThemeContext";
 import TreeProvider from "../contexts/TreeContext";
-import * as WebSocketTauri from "@tauri-apps/plugin-websocket";
 
 interface PostitPosition {
   id: number;
@@ -28,7 +27,7 @@ function saveLog(message: string) {
 
 let nextNodeId = Number(localStorage.getItem("nextNodeId") || 1);
 
-const BoardContent: React.FC = () => {
+function BoardContent({ socket }: { socket: any }) {
   const [postitPositions, setPostitPositions] = useState<PostitPosition[]>([]);
   const [messageSent, setMessageSent] = useState(false);
   const { theme } = useTheme();
@@ -37,8 +36,6 @@ const BoardContent: React.FC = () => {
   const [selectedNodeId, setSelectedNodeId] = useState<number | null>(null);
   const [treeData, setTreeData] = useState<Node | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
-  const [ws, setWs] = useState<any>(null);
-  const [isConnected, setIsConnected] = useState<boolean>(false);
 
   const predefinedConfigurations = [
     [
@@ -148,14 +145,16 @@ const BoardContent: React.FC = () => {
         setIsHome(false);
         setMessageSent(false);
       } else {
-        if (ws && isConnected) {
+        console.log("2 Sending message:", message);
+        if (socket) {
+          console.log("Sending message:", message);
           const payload = {
             prompt: message,
             user_context: [],
             results: "",
             context: "",
           };
-          ws.send(JSON.stringify(payload));
+          socket.send(JSON.stringify(payload));
         }
       }
     }
@@ -163,49 +162,61 @@ const BoardContent: React.FC = () => {
 
   const connectToWebSocket = async () => {
     try {
-      const socket = new WebSocket("ws://172.21.1.107:80/ws");
-      socket.addEventListener("open", () => {
-        console.log("WebSocket conectado");
-        setWs(socket);
-        setIsConnected(true);
-      });
-      socket.addEventListener("message", (event: any) => {
-        const data = event.data;
-        const postItTexts = data.split("%");
-        const loadedTree = localStorage.getItem("tree");
-        if (loadedTree) {
-          const currentTree = JSON.parse(loadedTree);
-          const addChildrenToNode = (node: Node) => {
-            if (node.id === selectedNodeId) {
-              postItTexts.forEach((text: string) => {
-                const childNode: Node = {
-                  id: nextNodeId++,
-                  context: text.trim(),
-                  children: [],
-                };
-                localStorage.setItem("nextNodeId", String(nextNodeId));
-                node.children.push(childNode);
-                saveLog("Adding Post-It to node: " + text);
-              });
-            } else {
-              node.children.forEach((child) => addChildrenToNode(child));
-            }
-          };
-          addChildrenToNode(currentTree);
-          localStorage.setItem("tree", JSON.stringify(currentTree));
-          setTreeData(currentTree);
-          setMessageSent(true);
-          generatePostitPositions();
+      let messageBuffer = ""; // Buffer to accumulate incoming messages
+
+      // socket.addEventListener("open", () => {
+      //   console.log("WebSocket conectado");
+      //   setIsConnected(true);
+      // });
+
+      socket.addListener((message: string) => {
+        messageBuffer += message; // Add incoming data to the buffer
+
+        if (messageBuffer.includes("%")) {
+          // Split buffer by '%'
+          const postItTexts = messageBuffer.split("%");
+
+          // Loop through all but the last part, as the last might be incomplete
+          const loadedTree = localStorage.getItem("tree");
+          if (loadedTree) {
+            const currentTree = JSON.parse(loadedTree);
+            const addChildrenToNode = (node: Node) => {
+              if (node.id === selectedNodeId) {
+                for (let i = 0; i < postItTexts.length - 1; i++) {
+                  const text = postItTexts[i].trim();
+                  const childNode: Node = {
+                    id: nextNodeId++,
+                    context: text,
+                    children: [],
+                  };
+                  localStorage.setItem("nextNodeId", String(nextNodeId));
+                  node.children.push(childNode);
+                  saveLog("Adding Post-It to node: " + text);
+                }
+              } else {
+                node.children.forEach((child) => addChildrenToNode(child));
+              }
+            };
+            addChildrenToNode(currentTree);
+            localStorage.setItem("tree", JSON.stringify(currentTree));
+            setTreeData(currentTree);
+            setMessageSent(true);
+            generatePostitPositions();
+          }
+
+          messageBuffer = postItTexts[postItTexts.length - 1];
         }
       });
-      socket.addEventListener("error", (error: any) => {
-        console.error("WebSocket Error:", error);
-      });
-      socket.addEventListener("close", () => {
-        console.log("WebSocket desconectado, intentando reconectar...");
-        setIsConnected(false);
-        setTimeout(connectToWebSocket, 5000);
-      });
+
+      // socket.addEventListener("error", (error: any) => {
+      //   console.error("WebSocket Error:", error);
+      // });
+
+      // socket.addEventListener("close", () => {
+      //   console.log("WebSocket desconectado, intentando reconectar...");
+      //   setIsConnected(false);
+      //   setTimeout(connectToWebSocket, 5000);
+      // });
     } catch (error) {
       console.error("Failed to connect:", error);
       setTimeout(connectToWebSocket, 5000);
@@ -221,8 +232,12 @@ const BoardContent: React.FC = () => {
   };
 
   useEffect(() => {
+    if (!socket) {
+      return;
+    }
+
     connectToWebSocket();
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
     const storedTree = localStorage.getItem("tree");
@@ -312,14 +327,12 @@ const BoardContent: React.FC = () => {
         })}
     </div>
   );
-};
+}
 
-const Board: React.FC = () => {
+export default function Board({ socket }: { socket: any }) {
   return (
     <TreeProvider>
-      <BoardContent />
+      <BoardContent socket={socket} />
     </TreeProvider>
   );
-};
-
-export default Board;
+}

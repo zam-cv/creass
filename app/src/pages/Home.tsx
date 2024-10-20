@@ -7,12 +7,30 @@ import CloseButton from "../components/ui/CloseButton";
 import ThemeSwitch from "../components/ui/ThemeSwitch";
 import { ThemeProvider, useTheme } from "../contexts/ThemeContext";
 import TreeComponent from "../components/TreePath";
+import WebSocket from "@tauri-apps/plugin-websocket";
 
 const HomeContent: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTreeOpen, setIsTreeOpen] = useState(false);
   const { theme } = useTheme();
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
+  const [socket, setSocket] = useState<any>(null);
+
+  useEffect(() => {
+    if (!socket) {
+      connectToWebSocket();
+    }
+  }, []);
+
+  const connectToWebSocket = async () => {
+    try {
+      const socket = await WebSocket.connect("ws://172.21.1.107:80/ws");
+      setSocket(socket);
+    } catch (error) {
+      console.error("Failed to connect:", error);
+      setTimeout(connectToWebSocket, 5000);
+    }
+  };
 
   useEffect(() => {
     const storedProject = localStorage.getItem("selectedProject");
@@ -90,7 +108,7 @@ const HomeContent: React.FC = () => {
       </header>
       <main>
         <div className="flex items-center justify-center min-h-[92vh]">
-          <Board />
+          <Board socket={socket} />
         </div>
       </main>
       {isModalOpen && (
