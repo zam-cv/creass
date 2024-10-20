@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from websocket import server  # Importar el servidor del socket
+from swebsocket import server  # Importar el servidor del socket
 
 app = FastAPI()
 
