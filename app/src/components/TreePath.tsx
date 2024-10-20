@@ -9,18 +9,20 @@ type TreeNode = {
 const TreeComponent: React.FC = () => {
   const [treeData, setTreeData] = useState<TreeNode[]>([]);
 
+  // Función para formatear el árbol de forma recursiva
+  const formatTreeData = (node: any): TreeNode => {
+    return {
+      name: node.context,
+      children: node.children?.map((child: any) => formatTreeData(child)) || [],
+    };
+  };
+
   useEffect(() => {
     const storedTree = localStorage.getItem("tree");
     if (storedTree) {
       const parsedTree = JSON.parse(storedTree);
       console.log("Árbol cargado:", parsedTree);
-      const formattedTreeData = {
-        name: parsedTree.context,
-        children: parsedTree.children.map((child: any) => ({
-          name: child.context,
-          children: child.children,
-        })),
-      };
+      const formattedTreeData = formatTreeData(parsedTree);
       setTreeData([formattedTreeData]);
     }
   }, []);
