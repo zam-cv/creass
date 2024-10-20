@@ -1,11 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PostIt from "../components/PostIt";
 import NewPostIt from "../components/newPostIt";
 import CreateProjectModal from "../components/CreateProjectModal";
+import { useNavigate } from "react-router-dom";
+
+interface PostItProps {
+  title: string;
+  onClick?: () => void; // Definimos la prop onClick como opcional
+}
 
 export default function MyProjects() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projects, setProjects] = useState<string[]>([]);
+  const navigate = useNavigate(); // Usamos navigate para redirigir al Home con el proyecto seleccionado
+
+  useEffect(() => {
+    // Cargar proyectos guardados de localStorage al cargar el componente
+    const storedProjects = localStorage.getItem("projects");
+    if (storedProjects) {
+      setProjects(JSON.parse(storedProjects));
+    }
+  }, []);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -16,7 +31,17 @@ export default function MyProjects() {
   };
 
   const handleCreateProject = (projectName: string) => {
-    setProjects([...projects, projectName]);
+    const updatedProjects = [...projects, projectName];
+    setProjects(updatedProjects);
+    localStorage.setItem("projects", JSON.stringify(updatedProjects)); // Guardar en localStorage
+    handleCloseModal();
+  };
+
+  const handleProjectClick = (projectName: string) => {
+    // Guardar el proyecto seleccionado en localStorage o en el estado global si tienes uno
+    localStorage.setItem("selectedProject", projectName);
+    // Navegar al home con el proyecto seleccionado
+    navigate("/");
   };
 
   return (
@@ -26,7 +51,11 @@ export default function MyProjects() {
         <div className="grid grid-cols-3 gap-20">
           <NewPostIt onClick={handleOpenModal} />
           {projects.map((project, index) => (
-            <PostIt key={index} title={project} />
+            <PostIt
+              key={index}
+              title={project}
+              onClick={() => handleProjectClick(project)} // Asignamos onClick
+            />
           ))}
         </div>
       </div>
