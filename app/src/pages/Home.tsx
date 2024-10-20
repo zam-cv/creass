@@ -107,7 +107,7 @@ const HomeContent: React.FC = () => {
       </header>
       <main>
         <div className="flex items-center justify-center min-h-[92vh]">
-          <Board />
+          <Board socket={socket} />
         </div>
       </main>
       {isModalOpen && (

@@ -34,7 +34,7 @@ function saveLog(message: string) {
 
 let nextNodeId = Number(localStorage.getItem("nextNodeId") || 1);
 
-const BoardContent: React.FC<boardProps> = ({ selectedNode }) => {
+function BoardContent({ socket }: { socket: any }) {
   const [postitPositions, setPostitPositions] = useState<PostitPosition[]>([]);
   const [messageSent, setMessageSent] = useState(false);
   const { theme } = useTheme();
@@ -185,9 +185,9 @@ const BoardContent: React.FC<boardProps> = ({ selectedNode }) => {
             context: "",
           };
 
-          addChildrenToNode(currentTree);
-          localStorage.setItem("tree", JSON.stringify(currentTree));
-          setTreeData(currentTree);
+          // addChildrenToNode(currentTree);
+          // localStorage.setItem("tree", JSON.stringify(currentTree));
+          // setTreeData(currentTree);
         }
 
         setMessageSent(true);
@@ -370,14 +370,12 @@ const BoardContent: React.FC<boardProps> = ({ selectedNode }) => {
         })}
     </div>
   );
-};
+}
 
-const Board: React.FC = () => {
+export default function Board({ socket }: { socket: any }) {
   return (
     <TreeProvider>
-      <BoardContent selectedNode={null} />
+      <BoardContent socket={socket} />
     </TreeProvider>
   );
-};
-
-export default Board;
+}
