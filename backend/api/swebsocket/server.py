@@ -66,6 +66,7 @@ async def handle_client(websocket: WebSocket, client_id: int):
 
             for i, prompt in enumerate(list_prompts):
                 await websocket.send_text(prompt)
+                await websocket.send_text('$')
                 if i == 5:
                     break
 
@@ -76,7 +77,7 @@ async def handle_client(websocket: WebSocket, client_id: int):
                     async with client.stream(
                         "POST",
                         "https://rhzzqeid4k2fbr-11434.proxy.runpod.net/api/generate",
-                        json={"model": "llama3.1:70b", "prompt": f"Tomando en cuenta los siguientes datos: [{web_scrapping_data}] da una muy breve descripcion y no respondas nada mas, ni un solo saludo ni nada que no sea una descripcion que responda al siguiente prompt: {prompt}."},
+                        json={"model": "llama3.1:70b", "prompt": f"Tomando en cuenta los siguientes datos: [{web_scrapping_data}] da una muy breve descripcion de 10 palabras y no respondas nada mas, ni un solo saludo ni nada que no sea una descripcion que responda al siguiente prompt: {prompt}."},
                     ) as response:
 
                         # Process the response in real-time
