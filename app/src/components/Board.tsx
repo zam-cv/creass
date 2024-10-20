@@ -36,6 +36,7 @@ function BoardContent({ socket }: { socket: any }) {
   const [selectedNodeId, setSelectedNodeId] = useState<number | null>(null);
   const [treeData, setTreeData] = useState<Node | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [isConnected, setIsConnected] = useState<boolean>(false);
 
   const predefinedConfigurations = [
     [
@@ -146,7 +147,7 @@ function BoardContent({ socket }: { socket: any }) {
         setMessageSent(false);
       } else {
         console.log("2 Sending message:", message);
-        if (socket) {
+        if (socket && isConnected) {
           console.log("Sending message:", message);
           const payload = {
             prompt: message,
@@ -164,13 +165,14 @@ function BoardContent({ socket }: { socket: any }) {
     try {
       let messageBuffer = ""; // Buffer to accumulate incoming messages
 
-      // socket.addEventListener("open", () => {
-      //   console.log("WebSocket conectado");
-      //   setIsConnected(true);
-      // });
+      socket.addEventListener("open", () => {
+        console.log("WebSocket conectado");
+        setIsConnected(true);
+      });
 
-      socket.addListener((message: string) => {
-        messageBuffer += message; // Add incoming data to the buffer
+      socket.addEventListener("message", (event: any) => {
+        const data = event.data;
+        messageBuffer += data; // Add incoming data to the buffer
 
         if (messageBuffer.includes("%")) {
           // Split buffer by '%'
@@ -184,14 +186,24 @@ function BoardContent({ socket }: { socket: any }) {
               if (node.id === selectedNodeId) {
                 for (let i = 0; i < postItTexts.length - 1; i++) {
                   const text = postItTexts[i].trim();
+
+                  // Split the fullText by '$' to separate title and info
+                  const [title, info] = text
+                    .split("$")
+                    .map((str) => str.trim());
+
+                  // Create the new Post-It node with title and info
                   const childNode: Node = {
                     id: nextNodeId++,
-                    context: text,
-                    children: [],
+                    context: `${title}$${info}`, // Store both title and info in context separated by '$'
+                    children: [], // No children for now
                   };
+
                   localStorage.setItem("nextNodeId", String(nextNodeId));
                   node.children.push(childNode);
-                  saveLog("Adding Post-It to node: " + text);
+                  saveLog(
+                    `Adding Post-It to node: Title - ${title}, Info - ${info}`
+                  );
                 }
               } else {
                 node.children.forEach((child) => addChildrenToNode(child));
@@ -208,15 +220,15 @@ function BoardContent({ socket }: { socket: any }) {
         }
       });
 
-      // socket.addEventListener("error", (error: any) => {
-      //   console.error("WebSocket Error:", error);
-      // });
+      socket.addEventListener("error", (error: any) => {
+        console.error("WebSocket Error:", error);
+      });
 
-      // socket.addEventListener("close", () => {
-      //   console.log("WebSocket desconectado, intentando reconectar...");
-      //   setIsConnected(false);
-      //   setTimeout(connectToWebSocket, 5000);
-      // });
+      socket.addEventListener("close", () => {
+        console.log("WebSocket desconectado, intentando reconectar...");
+        setIsConnected(false);
+        setTimeout(connectToWebSocket, 5000);
+      });
     } catch (error) {
       console.error("Failed to connect:", error);
       setTimeout(connectToWebSocket, 5000);
@@ -316,7 +328,8 @@ function BoardContent({ socket }: { socket: any }) {
             >
               <div className="absolute">
                 <PostIt
-                  title={postIts[index].context}
+                  title={postIts[index].context.split("$")[0]} // Extract title part from context
+                  info={postIts[index].context.split("$")[1]} // Extract info part from context
                   onClick={() =>
                     handlePostItClick(postIts[index].context, postIts[index].id)
                   }

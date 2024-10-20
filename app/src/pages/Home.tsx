@@ -7,7 +7,6 @@ import CloseButton from "../components/ui/CloseButton";
 import ThemeSwitch from "../components/ui/ThemeSwitch";
 import { ThemeProvider, useTheme } from "../contexts/ThemeContext";
 import TreeComponent from "../components/TreePath";
-import WebSocket from "@tauri-apps/plugin-websocket";
 
 const HomeContent: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,7 +23,7 @@ const HomeContent: React.FC = () => {
 
   const connectToWebSocket = async () => {
     try {
-      const socket = await WebSocket.connect("ws://172.21.1.107:80/ws");
+      const socket = new WebSocket("ws://172.21.1.107:80/ws");
       setSocket(socket);
     } catch (error) {
       console.error("Failed to connect:", error);
