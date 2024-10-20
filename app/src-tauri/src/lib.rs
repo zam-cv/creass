@@ -10,9 +10,7 @@ static MODEL: OnceCell<Arc<TokioMutex<Model>>> = OnceCell::new();
 static RUNTIME: OnceCell<tokio::runtime::Runtime> = OnceCell::new();
 
 fn get_runtime() -> &'static tokio::runtime::Runtime {
-    RUNTIME.get_or_init(|| {
-        tokio::runtime::Runtime::new().expect("Failed to create Tokio runtime")
-    })
+    RUNTIME.get_or_init(|| tokio::runtime::Runtime::new().expect("Failed to create Tokio runtime"))
 }
 
 async fn get_or_initialize_model() -> Result<Arc<TokioMutex<Model>>> {
@@ -50,7 +48,11 @@ fn query_model(prompt: String) -> Result<String, String> {
             .await
             .map_err(|e| e.to_string())?;
 
-        Ok(response.choices[0].message.content.clone().unwrap_or_default())
+        Ok(response.choices[0]
+            .message
+            .content
+            .clone()
+            .unwrap_or_default())
     })
 }
 
@@ -62,6 +64,7 @@ fn greet(name: &str) -> String {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_websocket::init())
         .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![greet, query_model])
         .run(tauri::generate_context!())
