@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import TextField from "./ui/Textfield";
 import PostIt from "./PostIt";
 import Draggable from "react-draggable";
+import { ThemeProvider, useTheme } from "../contexts/ThemeContext";
 
 interface PostitPosition {
   id: number;
@@ -9,7 +10,7 @@ interface PostitPosition {
   y: number;
 }
 
-export default function Board() {
+const BoardContent: React.FC = () => {
   const [postitPositions, setPostitPositions] = useState<PostitPosition[]>([]);
   const [messageSent, setMessageSent] = useState(false);
 
@@ -121,11 +122,18 @@ export default function Board() {
     generatePostitPositions();
   }, []);
 
+  const {theme} = useTheme();
+
   return (
-    <div className="relative w-full h-[92vh]">
+    <div className={`relative w-full h-[92vh] `}>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <div className="text-xl mb-4">
-          <h1 className="font-handlee">CreAss</h1>
+        <h1 className={`font-handlee ${
+                theme === "dark" ? "text-white" : "text-black"
+              } `}>
+    CreAss
+        </h1>
+
         </div>
         <TextField onSendMessage={handleSendMessage} />
       </div>
@@ -144,4 +152,13 @@ export default function Board() {
         ))}
     </div>
   );
-}
+};
+
+const Board: React.FC = () => {
+    return (
+        <ThemeProvider>
+            <BoardContent />
+        </ThemeProvider>
+    );
+};
+export default Board;
