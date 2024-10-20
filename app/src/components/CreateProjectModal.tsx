@@ -1,5 +1,5 @@
 import { useState } from "react";
-import CloseButton from "../components/ui/CloseButton"; // Asegúrate de que el path es correcto
+import CloseButton from "../components/ui/CloseButton";
 
 interface CreateProjectModalProps {
   onCreate: (projectName: string) => void;
@@ -22,7 +22,6 @@ export default function CreateProjectModal({
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div className="relative bg-gray-300 p-6 rounded-lg w-1/3">
-        {/* Botón para cerrar el modal */}
         <CloseButton onClick={onClose} />
 
         <h2 className="text-xl mb-4 ml-1 font-handlee">Create New Project</h2>
