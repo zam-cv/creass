@@ -1,0 +1,10 @@
+[
+    "https://www.sanidad.gob.es/organizacion/sns/planCalidadSNS/saludMental.htm", 
+    "https://www.aen.es/", 
+    "https://www.mentalhealth.org.uk/", 
+    "https://www.nimh.nih.gov/index.shtml",
+    "https://www.headstogether.org.uk/", 
+    "https://www.mind.org.uk/", 
+    "https://psicologiaymente.com/", 
+    "https://www.anar.org/"
+]

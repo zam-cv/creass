@@ -1,0 +1,11 @@
+[
+    "https://es.wikipedia.org/wiki/Organizaci%C3%B3n_Mundial_de_la_Salud",
+    "https://www.who.int/es/news-room/fact-sheets/detail/healthy-diet",
+    "https://www.who.int/es/health-topics/healthy-diet#tab=tab_1",
+    "https://www.gob.mx/salud/articulos/alimentacion-saludable",
+    "https://www.paho.org/es/emergencias-salud/reglas-oro-oms-para-preparacion-higienica-alimentos",
+    "https://www.gob.mx/profeco/articulos/para-una-buena-nutricion-que-hacer-y-a-quien-acudir?state=published",
+    "https://www.who.int/es/campaigns/connecting-the-world-to-combat-coronavirus/healthyathome/healthyathome---healthy-diet",
+    "https://www.uv.es/hort/alimentacion/alimentacion.html",
+    "https://www3.paho.org/ecu/1135-clasificacion-alimentos-sus-implicaciones-salud.html"
+]

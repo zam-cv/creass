@@ -1,0 +1,12 @@
+[
+    "https://www.emprendia.org/",  
+    "https://www.who.int/es", 
+    "https://www.mscbs.gob.es/", 
+    "https://www.msf.es/", 
+    "https://www.cruzroja.es/", 
+    "https://www.paho.org/es", 
+    "https://globalhealth.org/", 
+    "https://www.theglobalfund.org/en/", 
+    "https://www.hifa.org/", 
+    "https://www.saludsinfronteras.org.mx/"
+]

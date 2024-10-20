@@ -1,0 +1,11 @@
+[
+    "https://www.thegoodtrade.com/", 
+    "https://betterworldshopper.org/", 
+    "https://www.vidasostenible.org/", 
+    "https://wfto.com/", 
+    "http://www.fao.org/food-security-home/es/", 
+    "https://es.wfp.org/", 
+    "https://foodsecurityindex.eiu.com/", 
+    "https://www.feedingamerica.org/", 
+    "https://www.actionagainsthunger.org/"
+]

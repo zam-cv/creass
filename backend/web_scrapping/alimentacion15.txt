@@ -1,0 +1,12 @@
+[
+    "https://www.worldwatercouncil.org/", 
+    "https://www.gwp.org/", 
+    "https://www.bancomundial.org/es/topic/poverty", 
+    "https://www.undp.org/es", 
+    "https://www.oxfam.org/es", 
+    "https://www.actionagainsthunger.org/", 
+    "https://www.fundacionmicrofinanzasbbva.org/", 
+    "https://www.oxfamintermon.org/", 
+    "https://www.care.org/es/", 
+    "https://www.eapn.eu/"
+]

@@ -1,0 +1,12 @@
+[
+    "https://www.gob.mx/promosalud/es/articulos/que-es-la-alimentacion-saludable?idiom=es",
+    "https://www.bupasalud.com.mx/salud/alimentacion-saludable-para-ninos",
+    "https://www.cdc.gov/nccdphp/dnpao/features/healthy-eating-tips/index-es.html",
+    "https://www.niddk.nih.gov/health-information/informacion-de-la-salud/control-de-peso/alimentacion-saludable-actividad-fisica-vida/ayudar-ninos",
+    "https://www.kiwilimon.com/tips/cocina/tips-de-platillos/comidas-saludables-por-menos-de-100-pesos",
+    "https://www.cdc.gov/diabetes/es/healthy-eating/presupuesto-de-alimentacion-saludable.html",
+    "https://www.nfcc.org/es/blog/simple-tips-for-eating-healthy-on-a-budget/",
+    "https://rompiendodietas.es/consejos-para-una-alimentacion-saludable-economica/",
+    "https://www.academianutricionydietetica.org/saber-comprar/ahorrar-compra-super/"
+
+]
