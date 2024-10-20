@@ -112,7 +112,7 @@ const HomeContent: React.FC = () => {
             } p-10 rounded-lg w-3/4 h-3/4`}
           >
             <CloseButton onClick={handleCloseTree} />
-            <TreeComponent />
+            <TreeComponent onClose={handleCloseTree}/>
           </div>
         </div>
       )}

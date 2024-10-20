@@ -11,6 +11,10 @@ interface PostitPosition {
   y: number;
 }
 
+interface boardProps{
+  selectedNode: number | null;
+}
+
 interface Node {
   id: number;
   context: string;
@@ -30,7 +34,7 @@ function saveLog(message: string) {
 
 let nextNodeId = Number(localStorage.getItem("nextNodeId") || 1);
 
-const BoardContent: React.FC = () => {
+const BoardContent: React.FC<boardProps> = ({selectedNode}) => {
   const [postitPositions, setPostitPositions] = useState<PostitPosition[]>([]);
   const [messageSent, setMessageSent] = useState(false);
   const { theme } = useTheme();
@@ -43,7 +47,7 @@ const BoardContent: React.FC = () => {
   const sampleData = [
     "Idea 1: Improve user interface",
     "Idea 2: Implement new features",
-    "Idea 3: Optimize performance",
+    "pr 3: Optimize performance",
     "Idea 4: Increase security",
     "Idea 5: Refactor old code",
   ];
@@ -128,7 +132,7 @@ const BoardContent: React.FC = () => {
       { x: 1300, y: 150 },
       { x: 900, y: 0 },
       { x: 250, y: 350 },
-    ],
+    ],    
   ];
 
   const generatePostitPositions = () => {
@@ -143,6 +147,10 @@ const BoardContent: React.FC = () => {
     }));
 
     setPostitPositions(postitPositions);
+  };
+
+  const modifyText = (text: string): string => {
+    return text.slice(0, 5) + '...';
   };
 
   const handleSendMessage = (message: string) => {
@@ -182,9 +190,10 @@ const BoardContent: React.FC = () => {
           const addChildrenToNode = (node: Node) => {
             if (node.id === selectedNodeId) {
               sampleData.forEach((text) => {
+                const modifiedText = modifyText(text)
                 const childNode: Node = {
                   id: nextNodeId++,
-                  context: text,
+                  context: modifiedText,
                   children: [],
                 };
                 localStorage.setItem("nextNodeId", String(nextNodeId));
@@ -267,6 +276,7 @@ const BoardContent: React.FC = () => {
     return postIts;
   };
 
+
   return (
     <div className="relative w-full h-[92vh]">
       <div className="absolute inset-0 flex flex-col items-center justify-center">
@@ -311,7 +321,7 @@ const BoardContent: React.FC = () => {
 const Board: React.FC = () => {
   return (
     <TreeProvider>
-      <BoardContent />
+      <BoardContent selectedNode={null} />
     </TreeProvider>
   );
 };
