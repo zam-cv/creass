@@ -1,0 +1,13 @@
+[
+    "https://www.urbanchinainitiative.org/", 
+    "https://www.smartcityexpo.com/", 
+    "https://www.sustainablecitiesinstitute.org/", 
+    "https://gfhsforum.org/", 
+    "https://www.c40.org/", 
+    "https://www.worldwildlife.org/", 
+    "https://www.conservation.org/", 
+    "https://www.iucn.org/es", 
+    "https://programs.wcs.org/", 
+    "https://www.cbd.int/", 
+    "https://www.nature.org/es-es/"
+]

@@ -1,0 +1,10 @@
+[
+    "https://www.savethechildren.es/", 
+    "https://www.globalgiving.org/",  
+    "https://www.fairtrade.net/", 
+    "https://comerciojusto.org/", 
+    "https://www.ethicalconsumer.org/", 
+    "https://www.slowfood.com/", 
+    "https://buymeonce.com/", 
+    "https://www.greenpeace.org/espana/guia/"
+]

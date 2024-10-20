@@ -1,0 +1,10 @@
+[
+     "https://www.bannerhealth.com/es/healthcareblog/advise-me/healthy-eating-tips-that-can-save-you-money-at-the-grocery-store",
+    "https://www.tucanaldesalud.es/es/teinteresa/tips-ahorrar-comer-saludable",
+    "https://www2.cruzroja.es/web/ahora/-/doce-consejos-para-comer-sano-y-ahorrar-dinero",
+    "https://dietynut.com/blogs/lista-compra-saludable-economica",
+    "https://www.bbc.com/mundo/noticias-63691729",
+    "https://www.vitonica.com/recetas-saludables/rapida-barata-saludable-frase-posible-estas-27-recetas",
+    "https://www.directoalpaladar.com.mx/comida-mexicana/11-recetas-faciles-economicas-muy-rendidoras-te-ayudaran-a-ahorrar",
+    "https://www.unileverfoodsolutions.com.mx/tendencias/menusdelfuturo/soluciones-para-aprovechar-alimentos.html"
+]

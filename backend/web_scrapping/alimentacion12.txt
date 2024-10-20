@@ -1,0 +1,12 @@
+[
+    "https://www.proyectosemillas.org/", 
+    "https://www.amnesty.org/es/", 
+    "https://www.acnur.org/", 
+    "https://www.fundaciononce.es/", 
+    "https://www.un.org/en/global-issues/gender-equality", 
+    "https://www.hrc.org/", 
+    "https://www.argentina.gob.ar/inadi", 
+    "https://www.stonewall.org.uk/", 
+    "https://www.enar-eu.org/", 
+    "https://www.driadvocacy.org/"
+]

@@ -1,0 +1,12 @@
+[
+    "https://www.oei.es/", 
+    "https://www.bancomundial.org/es/topic/education", 
+    "https://www.educacionyfp.gob.es/", 
+    "https://www.ei-ie.org/en", 
+    "https://www.globalpartnership.org/", 
+    "https://www.edutopia.org/", 
+    "https://teachforall.org/", 
+    "https://www.oecd.org/education/",
+    "https://www.unwomen.org/es", 
+    "https://www.heforshe.org/es"
+]

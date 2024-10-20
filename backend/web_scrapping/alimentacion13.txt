@@ -1,0 +1,12 @@
+[
+    "https://felgtb.org/", 
+    "https://www.hrw.org/es", 
+    "https://www.ohchr.org/es", 
+    "https://www.amnesty.org/es/", 
+    "https://www.fidh.org/es/", 
+    "https://www.icrc.org/es", 
+    "https://euromedrights.org/", 
+    "https://www.ishr.ch/", 
+    "https://www.iidh.ed.cr/", 
+    "https://www.cejil.org/"
+]

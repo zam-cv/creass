@@ -1,0 +1,10 @@
+[
+    "https://www.medecinsdumonde.org/en", 
+    "https://www.cdc.gov/spanish/", 
+    "https://www.who.int/topics/disease_prevention/es/", 
+    "https://fundaciondelcorazon.com/", 
+    "https://www.aecc.es/", 
+    "https://www.insp.mx/", 
+    "https://www.ecdc.europa.eu/en", 
+    "https://www.apha.org/"
+]
