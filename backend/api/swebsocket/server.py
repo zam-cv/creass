@@ -3,9 +3,13 @@ import json
 import httpx 
 from fastapi import WebSocket, WebSocketDisconnect
 import asyncio
+from .data_vector import WeaviateQuery
 
 # Logger configuration for the WebSocket server
 logger = logging.getLogger(__name__)
+
+weaviate_query = WeaviateQuery()
+class_name = "HackMetaNew"
 
 # Function that handles real-time response generation
 async def handle_client(websocket: WebSocket, client_id: int):
@@ -64,12 +68,15 @@ async def handle_client(websocket: WebSocket, client_id: int):
                 await websocket.send_text(prompt)
                 if i == 5:
                     break
+
+                web_scrapping_data = weaviate_query.query(class_name, prompt)
+
                 # Second step: make the second HTTP call
                 async with httpx.AsyncClient() as client:
                     async with client.stream(
                         "POST",
                         "https://rhzzqeid4k2fbr-11434.proxy.runpod.net/api/generate",
-                        json={"model": "llama3.1:70b", "prompt": f"Da una muy breve descripcion y no respondas nada mas, ni un solo saludo ni nada que no sea una descripcion que responda al siguiente prompt: {prompt}"},
+                        json={"model": "llama3.1:70b", "prompt": f"Tomando en cuenta los siguientes datos: [{web_scrapping_data}] da una muy breve descripcion y no respondas nada mas, ni un solo saludo ni nada que no sea una descripcion que responda al siguiente prompt: {prompt}."},
                     ) as response:
 
                         # Process the response in real-time
