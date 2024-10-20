@@ -1,14 +1,9 @@
 from fastapi import FastAPI
-from routes import load_class_img
-import uvicorn
+from routes import llm
 from fastapi.middleware.cors import CORSMiddleware
 
-
-
 app = FastAPI() 
-app.include_router(load_class_img.app)   
-
-
+app.include_router(llm.router)  # Incluir el router desde routes/llm.py
 
 app.add_middleware(
     CORSMiddleware,
@@ -21,5 +16,3 @@ app.add_middleware(
 @app.get("/")
 async def root():
     return {"message": "Hello fast"}
-
-
