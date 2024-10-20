@@ -90,3 +90,25 @@ Corre la aplicacion
 ```bash
 npm run tauri dev
 ```
+
+# Tecnologías
+## Ollama
+Para el procesamiento de lenguaje natural, se usaron dos modelos de la familia Llama de Ollama:  
+
+* **llama3.2:3b**:  
+   * Este modelo fue empleado para realizar el embedding de los datos extraídos (mediante web scraping) hacia una base vectorial, lo que permite optimizar la búsqueda y recuperación de información.  
+   * También fue utilizado para preprocesar los datos recibidos por la aplicación y generar un prompt personalizado, adaptado al perfil y las preferencias del usuario.  
+* **llama3.1:70b**:  
+   * Este modelo recibe el prompt personalizado y, a partir de los datos previamente procesados y extraídos del web scraping, genera descripciones detalladas y recomendaciones de "ideas" alimenticias, ayudando a los usuarios a tomar decisiones informadas.  
+
+## FastAPI
+FastAPI es el framework elegido para implementar el backend de la aplicación. Fue utilizado principalmente para:
+
+* Crear el servidor de WebSocket, que permite el envío y recepción de datos en tiempo real entre la aplicación y los modelos de lenguaje que procesan las recomendaciones alimenticias.  
+* Gestionar las solicitudes de la API que manejan la interacción con los modelos de lenguaje y otros servicios.  
+
+## Node
+Node.js fue utilizado para realizar el web scraping, mediante el cual se extraen datos útiles sobre alimentación y salud desde diversas fuentes en la web. Este proceso automatizado permite obtener información actualizada que luego es integrada y procesada por los modelos de lenguaje.  
+
+## Tauri
+Tauri es el framework utilizado para desarrollar la aplicación de escritorio que brinda a los usuarios una interfaz amigable e intuitiva. Tauri permite mantener la aplicación ligera, rápida y segura, integrando las funcionalidades del backend con el frontend de manera eficiente.
