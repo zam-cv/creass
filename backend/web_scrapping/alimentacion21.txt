@@ -1,0 +1,14 @@
+[
+    "https://europa.eu/youth/solidarity_es", 
+    "https://www.habitat.org/es", 
+    "https://www.makeawish.es/",  
+    "https://www.ashoka.org/es-es/focus/emprendedores-sociales", 
+    "https://www.skoll.org/", 
+    "https://impacthub.net/", 
+    "https://www.schwabfound.org/", 
+    "https://www.socialenterprise.org.uk/", 
+    "https://www.redemprendeverde.es/", 
+    "https://socialab.com/",
+    "https://www.nesst.org/",
+    "https://www.foroimpacto.es/"
+]

@@ -1,0 +1,12 @@
+[
+    "https://www.ren21.net/",
+    "https://www.energias-renovables.com/", 
+    "https://www.renewableenergyworld.com/",
+    "https://wwindea.org/", 
+    "https://www.solarpowereurope.org/", 
+    "https://gwec.net/", 
+    "https://www.iea.org/topics/renewables", 
+    "https://www.cleanenergycouncil.org.au/",
+    "https://es.unesco.org/themes/educacion", 
+    "https://www.unicef.org/es/educacion"
+]

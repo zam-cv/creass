@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.schema import LLMResult, Generation
 from langchain.llms.base import BaseLLM
+import os
 
 # Paso 1: Crear la clase para manejar el prompt con la API externa
 class CustomAPIWrapper(BaseLLM, BaseModel):  
@@ -34,7 +35,7 @@ class CustomAPIWrapper(BaseLLM, BaseModel):
     def _generate(self, prompt, stop=None):
         response = self._call(prompt, stop)
         return LLMResult(generations=[[Generation(text=response)]])
-
+    
     @property
     def _identifying_params(self):
         return {"api_url": self.api_url}
@@ -60,6 +61,15 @@ router = APIRouter()
 class PromptRequest(BaseModel):
     question: str
 
+# Función para guardar el resultado en un archivo txt
+def save_response_to_file(response: str, filename: str = "output.txt"):
+    try:
+        with open(filename, 'a') as file:
+            file.write(response)
+        print(f"Response saved to {filename}")
+    except IOError as e:
+        print(f"Error saving response to file: {str(e)}")
+
 # Ruta POST para procesar el prompt
 @router.post("/generate-prompt")
 async def generate_prompt(request: PromptRequest):
@@ -67,7 +77,11 @@ async def generate_prompt(request: PromptRequest):
         # Conectar el prompt y el modelo a través de la cadena
         chain = prompt_template | custom_llm
         result = chain.invoke({"question": request.question})
-
+        
+        # Guardar el resultado en un archivo txt
+        save_response_to_file(result)
+        
         return {"response": result}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error procesando el prompt: {str(e)}")
+

@@ -1,0 +1,12 @@
+[
+    "https://www.greenpeace.org/espana/", 
+    "https://www.miteco.gob.es/es/calidad-y-evaluacion-ambiental/temas/gestion-residuos/", 
+    "https://www.eea.europa.eu/es/themes/waste", 
+    "https://www.epa.gov/es/reduce-reuse-recycle", 
+    "https://www.reciclamas.eu/", 
+    "https://www.terracycle.com/es-ES/", 
+    "https://earth911.com/", 
+    "https://waste-management-world.com/", 
+    "https://zerowasteeurope.eu/",
+    "https://www.ipcc.ch/"
+]

@@ -1,0 +1,13 @@
+[
+    "https://www.unep.org/es",
+    "https://www.wwf.es/", 
+    "http://www.climatenetwork.org/", 
+    "https://www.climaterealityproject.org/", 
+    "https://climate.nasa.gov/", 
+    "https://www.greenpeace.org/international/", 
+    "https://www.miteco.gob.es/es/cambio-climatico/", 
+    "https://www.ucsusa.org/", 
+    "https://www.carbonbrief.org/",
+    "https://www.irena.org/",
+    "https://www.idae.es/"
+]

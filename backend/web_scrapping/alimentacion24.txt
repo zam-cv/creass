@@ -1,0 +1,9 @@
+[
+     "https://www.vigisantacruz.gob.bo/", 
+    "https://www.paho.org/es", 
+    "https://world-heart-federation.org/", 
+    "https://www.techsoup.org/", 
+    "https://nethope.org/", 
+    "https://www.technologyreview.es/", 
+    "https://ssir.org/"
+]

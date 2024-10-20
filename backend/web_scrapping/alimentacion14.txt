@@ -1,0 +1,11 @@
+[
+    "https://www.rsf-es.org/", 
+    "https://www.unicef.org/es/agua-saneamiento-e-higiene", 
+    "https://www.who.int/es/health-topics/water-sanitation-and-hygiene", 
+    "https://water.org/", 
+    "https://www.undp.org/es/water-and-ocean-governance", 
+    "https://iwa-network.org/", 
+    "https://www.sanitationandwaterforall.org/", 
+    "https://agua.org.mx/", 
+    "https://www.wearewater.org/es"
+]

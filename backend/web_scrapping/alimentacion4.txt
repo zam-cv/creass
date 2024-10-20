@@ -1,0 +1,11 @@
+[
+    "https://www.who.int/es/news/item/12-01-2021-who-urges-governments-to-promote-healthy-food-in-public-facilities",
+    "https://ambipar.com/es/noticias/la-importancia-de-la-gestion-de-residuos-y-el-reciclaje/",
+    "https://www.recytrans.com/blog/reciclaje/",
+    "https://www.rajapack.es/medioambiente/reciclaje-residuos",
+    "https://www.gob.mx/semarnat/acciones-y-programas/clasificacion-reciclaje-y-valoracion-de-los-rsu",
+    "https://onu-habitat.org/index.php/recolectar-y-eliminar-residuos-de-manera-eficiente",
+    "https://safetyculture.com/es/temas/gestion-de-residuos/",
+    "https://mexico.pochteca.net/recoleccion-y-gestion-de-los-residuos-reciclables/",
+    "https://www.ecoembes.com/"
+]

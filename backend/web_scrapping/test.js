@@ -1,7 +1,6 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const axios = require('axios');
-const cheerio = require('cheerio');
 const express = require('express');
 
 const app = express();
@@ -13,7 +12,7 @@ app.use(express.json());
 // Function to read the URLs from alimentacion.txt
 async function getNutritionLinks() {
     try {
-        const data = fs.readFileSync('alimentacion.txt', 'utf8');
+        const data = fs.readFileSync('alimentacion13.txt', 'utf8');
         const links = JSON.parse(data);  // Ensure the file is properly formatted JSON array
         return links;
     } catch (error) {
@@ -38,8 +37,10 @@ async function scrape(url) {
     body.forEach((div) => {
         result += " " + div;
     });
+    
     result = result.replace(/\s+/g, ' ');  // Normalize whitespace
     result = result.toLowerCase();  // Convert text to lowercase
+    result = result.replace(/"/g, '');  // Remove all double quotes
     console.log(result);
     await browser.close();
     return result;
@@ -54,7 +55,7 @@ async function main() {
         try {
             result += await scrape(link);
             count++;
-            if (count >= 300) {  // Limit the scraping to the first 10 links (adjust as needed)
+            if (count >= 5) {  // Limit the scraping to the first 300 links (adjust as needed)
                 break;
             }
         } catch (err) {
