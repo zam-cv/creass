@@ -3,9 +3,10 @@ import { useRef, useState } from "react";
 
 interface TextFieldProps {
   onSendMessage: (message: string) => void;
+  isHome: boolean; // Nueva prop para saber si estamos en Home
 }
 
-export default function TextField({ onSendMessage }: TextFieldProps) {
+export default function TextField({ onSendMessage, isHome }: TextFieldProps) {
   const [message, setMessage] = useState("");
 
   const handleSend = () => {
@@ -28,7 +29,9 @@ export default function TextField({ onSendMessage }: TextFieldProps) {
       <textarea
         ref={textareaRef}
         className="w-full px-4 py-2 pr-12 outline-none bg-textfield rounded-lg hover:shadow-lg"
-        placeholder="Escribe una idea.."
+        placeholder={
+          isHome ? "Escribe el tema de tu nuevo tablero" : "Escribe una idea.."
+        } // Placeholder cambia según isHome
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         onInput={handleInput}

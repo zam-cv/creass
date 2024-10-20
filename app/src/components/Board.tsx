@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import TextField from "./ui/Textfield";
 import PostIt from "./PostIt";
 import Draggable from "react-draggable";
-import { ThemeProvider, useTheme } from "../contexts/ThemeContext";
+import { useTheme } from "../contexts/ThemeContext";
 
 interface PostitPosition {
   id: number;
@@ -14,7 +14,7 @@ const BoardContent: React.FC = () => {
   const [postitPositions, setPostitPositions] = useState<PostitPosition[]>([]);
   const [messageSent, setMessageSent] = useState(false);
   const { theme } = useTheme();
-  console.log("Current theme:", theme);
+  const [isHome, setIsHome] = useState<boolean>(true); // Para saber si estamos en "Home"
 
   const predefinedConfigurations = [
     // Configuración 1
@@ -115,14 +115,37 @@ const BoardContent: React.FC = () => {
 
   const handleSendMessage = (message: string) => {
     if (message.trim() !== "") {
-      setMessageSent(true);
-      generatePostitPositions();
+      const selectedProject = localStorage.getItem("selectedProject");
+
+      if (!selectedProject) {
+        const storedProjects = localStorage.getItem("projects");
+        const projects = storedProjects ? JSON.parse(storedProjects) : [];
+
+        const newProjectName = message;
+        const updatedProjects = [...projects, newProjectName];
+        localStorage.setItem("projects", JSON.stringify(updatedProjects));
+        localStorage.setItem("selectedProject", newProjectName);
+
+        window.location.reload();
+      } else {
+        setMessageSent(true);
+        generatePostitPositions();
+      }
     }
   };
 
   useEffect(() => {
-    generatePostitPositions();
-  }, [theme]);
+    const selectedProject = localStorage.getItem("selectedProject");
+    if (!selectedProject) {
+      setIsHome(true);
+    } else {
+      setIsHome(false);
+    }
+
+    if (!isHome || messageSent) {
+      generatePostitPositions();
+    }
+  }, [theme, messageSent]);
 
   return (
     <div className="relative w-full h-[92vh]">
@@ -136,7 +159,7 @@ const BoardContent: React.FC = () => {
             Cre-As
           </h1>
         </div>
-        <TextField onSendMessage={handleSendMessage} />
+        <TextField onSendMessage={handleSendMessage} isHome={isHome} />
       </div>
 
       {messageSent &&
