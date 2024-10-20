@@ -13,9 +13,58 @@ Creas es la aplicación que está revolucionando la forma en que las personas cu
 Creas no es solo una app, es una herramienta para empoderar a las personas a tomar decisiones conscientes sobre su salud, de forma realista, económica y efectiva. ¡Únete al movimiento y descubre que cuidar de tu cuerpo puede ser más fácil y emocionante de lo que creías!
 
 
-## Pasos para correr la aplicacion
+## Instrucciones para correr la aplicacion
 
 ### Requerimientos
+
+1. **Node.js**: Puedes descargarlo desde el siguiente enlace:
+   [Descargar Node.js](https://nodejs.org/en/download/package-manager)
+
+2. **Python 3.9 o superior**: Puedes descargar la versión correcta desde el siguiente enlace:
+   [Descargar Python](https://www.python.org/downloads/)
+
+3. **Git**: Asegúrate de tenerlo instalado. Puedes obtenerlo desde el siguiente enlace:
+   [Descargar Git](https://git-scm.com/downloads)
+
+4. **Rust**: Lo puedes descargar en el siguiente enlace:
+
+    [Descargar Rust](https://www.rust-lang.org/tools/install)
+
+
+## Clona el repositorio 
+
+```bash
+git clone https://github.com/zam-cv/creass
+```
+
+Ingresa a la carpeta del proyecto
+
+
+```bash
+cd creass
+```
+
+## Pasos para correr el servidor
+
+ingresa a la carpeta backend/api
+
+```bash
+cd backend/api
+```
+
+instala dependencias de python
+
+
+```bash
+pip install -r requirements.txt
+```
+
+corre el servidor
+
+
+```bash
+fastapi run app.py
+```
 
 ```bash
 pip install pyoxidizer
