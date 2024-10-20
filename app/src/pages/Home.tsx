@@ -4,7 +4,7 @@ import MyProjects from "./MyProjects";
 import Board from "../components/Board";
 import CloseButton from "../components/ui/CloseButton";
 import ThemeSwitch from "../components/ui/ThemeSwitch";
-import { ThemeProvider, useTheme } from "../contexts/themeContext";
+import { ThemeProvider, useTheme } from "../contexts/ThemeContext";
 
 const HomeContent: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,7 +33,7 @@ const HomeContent: React.FC = () => {
       }`}
     >
       <header className="h-[8vh]">
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
           <div className="order-first pl-5 pt-3">
             <LayoutGrid
               size={35}
@@ -42,8 +42,12 @@ const HomeContent: React.FC = () => {
               color={theme === "dark" ? "white" : "black"}
             />
           </div>
-          <div className="flex items-center">
-            <h1 className="text-2xl">
+          <div className="flex items-center justify-center mt-2">
+            <h1
+              className={`text-2xl font-handlee ${
+                theme === "dark" ? "text-white" : "text-black"
+              }`}
+            >
               {selectedProject ? selectedProject : "Home"}
             </h1>
           </div>

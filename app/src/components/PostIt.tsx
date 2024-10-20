@@ -1,15 +1,16 @@
 interface PostItProps {
   title: string;
   onClick?: () => void;
+  className?: string;
 }
 
-const PostIt: React.FC<PostItProps> = ({ title, onClick }) => {
+const PostIt: React.FC<PostItProps> = ({ title, onClick, className }) => {
   return (
     <div
-      className="w-48 h-48 bg-postIt rounded-lg shadow-lg cursor-pointer flex items-center justify-center"
+      className={`w-48 h-48 bg-postIt rounded-lg shadow-lg cursor-pointer flex items-center justify-center ${className}`}
       onClick={onClick}
     >
-      <h2 className="text-xl font-bold">{title}</h2>
+      <h2 className="text-black text-xl font-bold font-handlee">{title}</h2>
     </div>
   );
 };
