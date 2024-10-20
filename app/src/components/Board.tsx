@@ -3,7 +3,8 @@ import TextField from "./ui/Textfield";
 import PostIt from "./PostIt";
 import Draggable from "react-draggable";
 import { useTheme } from "../contexts/ThemeContext";
-import TreeProvider, { useTree } from "../contexts/TreeContext";
+import TreeProvider from "../contexts/TreeContext";
+import * as WebSocketTauri from "@tauri-apps/plugin-websocket";
 
 interface PostitPosition {
   id: number;
@@ -20,11 +21,8 @@ interface Node {
 function saveLog(message: string) {
   const logs = localStorage.getItem("logs");
   const logArray = logs ? JSON.parse(logs) : [];
-
   logArray.push({ message });
-
   localStorage.setItem("logs", JSON.stringify(logArray));
-
   console.log(message);
 }
 
@@ -38,18 +36,11 @@ const BoardContent: React.FC = () => {
   const [projectTitle, setProjectTitle] = useState("Cre-As");
   const [selectedNodeId, setSelectedNodeId] = useState<number | null>(null);
   const [treeData, setTreeData] = useState<Node | null>(null);
-
-  // Info muestra
-  const sampleData = [
-    "Idea 1: Improve user interface",
-    "Idea 2: Implement new features",
-    "Idea 3: Optimize performance",
-    "Idea 4: Increase security",
-    "Idea 5: Refactor old code",
-  ];
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [ws, setWs] = useState<any>(null);
+  const [isConnected, setIsConnected] = useState<boolean>(false);
 
   const predefinedConfigurations = [
-    // Configuración 1
     [
       { x: 100, y: 100 },
       { x: 300, y: 300 },
@@ -57,7 +48,6 @@ const BoardContent: React.FC = () => {
       { x: 900, y: 450 },
       { x: 1200, y: 100 },
     ],
-    // Configuración 2
     [
       { x: 150, y: 250 },
       { x: 1300, y: 50 },
@@ -65,7 +55,6 @@ const BoardContent: React.FC = () => {
       { x: 300, y: 10 },
       { x: 650, y: 500 },
     ],
-    // Configuración 3
     [
       { x: 200, y: 50 },
       { x: 1250, y: 350 },
@@ -73,7 +62,6 @@ const BoardContent: React.FC = () => {
       { x: 600, y: 450 },
       { x: 1300, y: 10 },
     ],
-    // Configuración 4
     [
       { x: 50, y: 100 },
       { x: 850, y: 450 },
@@ -81,7 +69,6 @@ const BoardContent: React.FC = () => {
       { x: 1400, y: 250 },
       { x: 300, y: 400 },
     ],
-    // Configuración 5
     [
       { x: 100, y: 50 },
       { x: 600, y: 10 },
@@ -89,7 +76,6 @@ const BoardContent: React.FC = () => {
       { x: 1300, y: 20 },
       { x: 150, y: 450 },
     ],
-    // Configuración 6
     [
       { x: 20, y: 20 },
       { x: 600, y: 40 },
@@ -97,7 +83,6 @@ const BoardContent: React.FC = () => {
       { x: 1300, y: 100 },
       { x: 250, y: 450 },
     ],
-    // Configuración 7
     [
       { x: 50, y: 100 },
       { x: 400, y: 350 },
@@ -105,7 +90,6 @@ const BoardContent: React.FC = () => {
       { x: 700, y: 50 },
       { x: 100, y: 400 },
     ],
-    // Configuración 8
     [
       { x: 150, y: 50 },
       { x: 1400, y: 30 },
@@ -113,7 +97,6 @@ const BoardContent: React.FC = () => {
       { x: 650, y: 0 },
       { x: 300, y: 450 },
     ],
-    // Configuración 9
     [
       { x: 50, y: 300 },
       { x: 700, y: 30 },
@@ -121,7 +104,6 @@ const BoardContent: React.FC = () => {
       { x: 200, y: 10 },
       { x: 600, y: 450 },
     ],
-    // Configuración 10
     [
       { x: 150, y: 50 },
       { x: 600, y: 450 },
@@ -136,55 +118,69 @@ const BoardContent: React.FC = () => {
       Math.random() * predefinedConfigurations.length
     );
     const selectedConfiguration = predefinedConfigurations[randomIndex];
-
     const postitPositions = selectedConfiguration.map((position, index) => ({
       id: index,
       ...position,
     }));
-
     setPostitPositions(postitPositions);
   };
 
   const handleSendMessage = (message: string) => {
     if (message.trim() !== "") {
       const selectedProject = localStorage.getItem("selectedProject");
-
       if (!selectedProject) {
         const storedProjects = localStorage.getItem("projects");
         const projects = storedProjects ? JSON.parse(storedProjects) : [];
-
         const newProjectName = message;
         const updatedProjects = [...projects, newProjectName];
-
         const newTreeRoot = {
           id: nextNodeId++,
           context: newProjectName,
           children: [],
         };
         localStorage.setItem("nextNodeId", String(nextNodeId));
-
         localStorage.setItem("tree", JSON.stringify(newTreeRoot));
         localStorage.setItem("projects", JSON.stringify(updatedProjects));
         localStorage.setItem("selectedProject", newProjectName);
-
         setProjectTitle(newProjectName);
         setTreeData(newTreeRoot);
         setSelectedNodeId(newTreeRoot.id);
         setIsHome(false);
         setMessageSent(false);
-        window.location.reload();
       } else {
-        const loadedTree = localStorage.getItem("tree");
+        if (ws && isConnected) {
+          const payload = {
+            prompt: message,
+            user_context: [],
+            results: "",
+            context: "",
+          };
+          ws.send(JSON.stringify(payload));
+        }
+      }
+    }
+  };
 
+  const connectToWebSocket = async () => {
+    try {
+      const socket = new WebSocket("ws://172.21.1.107:80/ws");
+      socket.addEventListener("open", () => {
+        console.log("WebSocket conectado");
+        setWs(socket);
+        setIsConnected(true);
+      });
+      socket.addEventListener("message", (event: any) => {
+        const data = event.data;
+        const postItTexts = data.split("%");
+        const loadedTree = localStorage.getItem("tree");
         if (loadedTree) {
           const currentTree = JSON.parse(loadedTree);
-
           const addChildrenToNode = (node: Node) => {
             if (node.id === selectedNodeId) {
-              sampleData.forEach((text) => {
+              postItTexts.forEach((text: string) => {
                 const childNode: Node = {
                   id: nextNodeId++,
-                  context: text,
+                  context: text.trim(),
                   children: [],
                 };
                 localStorage.setItem("nextNodeId", String(nextNodeId));
@@ -195,23 +191,38 @@ const BoardContent: React.FC = () => {
               node.children.forEach((child) => addChildrenToNode(child));
             }
           };
-
           addChildrenToNode(currentTree);
           localStorage.setItem("tree", JSON.stringify(currentTree));
           setTreeData(currentTree);
+          setMessageSent(true);
+          generatePostitPositions();
         }
-
-        setMessageSent(true);
-        generatePostitPositions();
-      }
+      });
+      socket.addEventListener("error", (error: any) => {
+        console.error("WebSocket Error:", error);
+      });
+      socket.addEventListener("close", () => {
+        console.log("WebSocket desconectado, intentando reconectar...");
+        setIsConnected(false);
+        setTimeout(connectToWebSocket, 5000);
+      });
+    } catch (error) {
+      console.error("Failed to connect:", error);
+      setTimeout(connectToWebSocket, 5000);
     }
   };
 
   const handlePostItClick = (postItText: string, nodeId: number) => {
-    setProjectTitle(postItText);
-    setPostitPositions([]);
-    setSelectedNodeId(nodeId);
+    if (!isDragging) {
+      setProjectTitle(postItText);
+      setPostitPositions([]);
+      setSelectedNodeId(nodeId);
+    }
   };
+
+  useEffect(() => {
+    connectToWebSocket();
+  }, []);
 
   useEffect(() => {
     const storedTree = localStorage.getItem("tree");
@@ -232,11 +243,9 @@ const BoardContent: React.FC = () => {
     } else {
       setIsHome(false);
     }
-
     if (!isHome || messageSent) {
       generatePostitPositions();
     }
-
     const storedTree = localStorage.getItem("tree");
     if (storedTree) {
       setTreeData(JSON.parse(storedTree));
@@ -251,7 +260,6 @@ const BoardContent: React.FC = () => {
 
   const getCurrentPostIts = () => {
     const postIts: Node[] = [];
-
     const findNodeById = (node: Node) => {
       if (node.id === selectedNodeId) {
         postIts.push(...node.children);
@@ -259,11 +267,9 @@ const BoardContent: React.FC = () => {
         node.children.forEach((child) => findNodeById(child));
       }
     };
-
     if (treeData) {
       findNodeById(treeData);
     }
-
     return postIts;
   };
 
@@ -281,17 +287,17 @@ const BoardContent: React.FC = () => {
         </div>
         <TextField onSendMessage={handleSendMessage} isHome={isHome} />
       </div>
-
       {messageSent &&
         postitPositions.map((position, index) => {
           const postIts = getCurrentPostIts();
           if (index >= postIts.length) return null;
-
           return (
             <Draggable
               key={postIts[index].id}
               defaultPosition={{ x: position.x, y: position.y }}
               bounds="parent"
+              onStart={() => setIsDragging(true)}
+              onStop={() => setIsDragging(false)}
             >
               <div className="absolute">
                 <PostIt

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import * as React from "react";
+import { useState, useEffect } from "react";
 import { LayoutGrid, Network, Home as HomeIcon } from "lucide-react";
 import MyProjects from "./MyProjects";
 import Board from "../components/Board";
