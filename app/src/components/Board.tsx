@@ -14,7 +14,17 @@ const BoardContent: React.FC = () => {
   const [postitPositions, setPostitPositions] = useState<PostitPosition[]>([]);
   const [messageSent, setMessageSent] = useState(false);
   const { theme } = useTheme();
-  const [isHome, setIsHome] = useState<boolean>(true); // Para saber si estamos en "Home"
+  const [isHome, setIsHome] = useState<boolean>(true);
+  const [projectTitle, setProjectTitle] = useState("Cre-As");
+
+  // Info muestra
+  const sampleData = [
+    "Idea 1: Improve user interface",
+    "Idea 2: Implement new features",
+    "Idea 3: Optimize performance",
+    "Idea 4: Increase security",
+    "Idea 5: Refactor old code",
+  ];
 
   const predefinedConfigurations = [
     // Configuración 1
@@ -125,13 +135,18 @@ const BoardContent: React.FC = () => {
         const updatedProjects = [...projects, newProjectName];
         localStorage.setItem("projects", JSON.stringify(updatedProjects));
         localStorage.setItem("selectedProject", newProjectName);
-
+        setProjectTitle(newProjectName);
         window.location.reload();
       } else {
         setMessageSent(true);
         generatePostitPositions();
       }
     }
+  };
+
+  const handlePostItClick = (postItText: string) => {
+    setProjectTitle(postItText);
+    setPostitPositions([]);
   };
 
   useEffect(() => {
@@ -156,7 +171,7 @@ const BoardContent: React.FC = () => {
               theme === "dark" ? "text-white" : "text-black"
             }`}
           >
-            Cre-As
+            {projectTitle}
           </h1>
         </div>
         <TextField onSendMessage={handleSendMessage} isHome={isHome} />
@@ -170,7 +185,12 @@ const BoardContent: React.FC = () => {
             bounds="parent"
           >
             <div className="absolute">
-              <PostIt title="{}" />
+              <PostIt
+                title={sampleData[index % sampleData.length]}
+                onClick={() =>
+                  handlePostItClick(sampleData[index % sampleData.length])
+                } // Maneja el clic en cada post-it
+              />
             </div>
           </Draggable>
         ))}
