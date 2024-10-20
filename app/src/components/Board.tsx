@@ -174,7 +174,6 @@ const BoardContent: React.FC = () => {
         setMessageSent(false);
         window.location.reload();
       } else {
-        // Añadir al nodo seleccionado
         const loadedTree = localStorage.getItem("tree");
 
         if (loadedTree) {

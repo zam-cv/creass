@@ -13,7 +13,7 @@ const TreeComponent: React.FC = () => {
     const storedTree = localStorage.getItem("tree");
     if (storedTree) {
       const parsedTree = JSON.parse(storedTree);
-      console.log("Árbol cargado:", parsedTree); // Aquí ves el árbol que estás cargando
+      console.log("Árbol cargado:", parsedTree);
       const formattedTreeData = {
         name: parsedTree.context,
         children: parsedTree.children.map((child: any) => ({
@@ -26,13 +26,11 @@ const TreeComponent: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // Obtener el árbol guardado en localStorage para el proyecto seleccionado
     const storedProject = localStorage.getItem("selectedProject");
     const storedTree = localStorage.getItem("treeData");
 
     if (storedProject && storedTree) {
       const parsedTree = JSON.parse(storedTree);
-      // Encontrar el árbol asociado al proyecto actual
       const projectTree = parsedTree.find(
         (tree: { name: string }) => tree.name === storedProject
       );
