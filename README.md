@@ -101,14 +101,22 @@ Para el procesamiento de lenguaje natural, se usaron dos modelos de la familia L
 * **llama3.1:70b**:  
    * Este modelo recibe el prompt personalizado y, a partir de los datos previamente procesados y extraídos del web scraping, genera descripciones detalladas y recomendaciones de "ideas" alimenticias, ayudando a los usuarios a tomar decisiones informadas.  
 
+![Ollama](assets/42f6b28d-9117-48cd-ac0d-44baaf5c178e.png)
+
 ## FastAPI
 FastAPI es el framework elegido para implementar el backend de la aplicación. Fue utilizado principalmente para:
 
 * Crear el servidor de WebSocket, que permite el envío y recepción de datos en tiempo real entre la aplicación y los modelos de lenguaje que procesan las recomendaciones alimenticias.  
 * Gestionar las solicitudes de la API que manejan la interacción con los modelos de lenguaje y otros servicios.  
 
+![FastAPI](assets/logo-teal.png)
+
 ## Node
 Node.js fue utilizado para realizar el web scraping, mediante el cual se extraen datos útiles sobre alimentación y salud desde diversas fuentes en la web. Este proceso automatizado permite obtener información actualizada que luego es integrada y procesada por los modelos de lenguaje.  
 
+![NodeJS](assets/node-js-icon-454x512-nztofx17.png)
+
 ## Tauri
 Tauri es el framework utilizado para desarrollar la aplicación de escritorio que brinda a los usuarios una interfaz amigable e intuitiva. Tauri permite mantener la aplicación ligera, rápida y segura, integrando las funcionalidades del backend con el frontend de manera eficiente.
+
+![Tauri](assets/tauri-1.svg)
