@@ -1,5 +1,5 @@
-import React from 'react';
-import Tree from 'react-d3-tree';
+import React, { useEffect, useState } from "react";
+import Tree from "react-d3-tree";
 
 type TreeNode = {
   name: string;
@@ -7,42 +7,57 @@ type TreeNode = {
 };
 
 const TreeComponent: React.FC = () => {
-  // Definir los datos del árbol
-  const treeData: TreeNode[] = [
-    {
-      name: "Root",
-      children: [
-        {
-          name: "Child 1",
-          children: [
-            { name: "Grandchild 1" },
-            { name: "Grandchild 2" },
-          ],
-        },
-        {
-          name: "Child 2",
-          children: [
-            { name: "Grandchild 3" },
-            { name: "Grandchild 4" },
-          ],
-        },
-      ],
-    },
-  ];
+  const [treeData, setTreeData] = useState<TreeNode[]>([]);
+
+  // Función para formatear el árbol de forma recursiva
+  const formatTreeData = (node: any): TreeNode => {
+    return {
+      name: node.context,
+      children: node.children?.map((child: any) => formatTreeData(child)) || [],
+    };
+  };
+
+  useEffect(() => {
+    const storedTree = localStorage.getItem("tree");
+    if (storedTree) {
+      const parsedTree = JSON.parse(storedTree);
+      console.log("Árbol cargado:", parsedTree);
+      const formattedTreeData = formatTreeData(parsedTree);
+      setTreeData([formattedTreeData]);
+    }
+  }, []);
+
+  useEffect(() => {
+    const storedProject = localStorage.getItem("selectedProject");
+    const storedTree = localStorage.getItem("treeData");
+
+    if (storedProject && storedTree) {
+      const parsedTree = JSON.parse(storedTree);
+      const projectTree = parsedTree.find(
+        (tree: { name: string }) => tree.name === storedProject
+      );
+      if (projectTree) {
+        setTreeData([projectTree]);
+      }
+    }
+  }, []);
 
   return (
-    <div style={{ width: '100%', height: '500px' }}>
+    <div style={{ width: "100%", height: "500px" }}>
       <h3>Tu camino</h3>
-      <Tree
-        data={treeData} // Los datos del árbol
-        orientation="vertical" // Orientación del árbol (puede ser "vertical" o "horizontal")
-        translate={{ x: 200, y: 50 }} // Posición del árbol en el área
-        pathFunc="straight"
-        collapsible = {true}
-        dimensions={undefined}
-        draggable ={true}
-         // Estilo de las líneas de conexión (puede ser "diagonal", "elbow", etc.)
-      />
+      {treeData.length > 0 ? (
+        <Tree
+          data={treeData}
+          orientation="vertical"
+          translate={{ x: 200, y: 50 }}
+          pathFunc="straight"
+          collapsible={true}
+          dimensions={undefined}
+          draggable={true}
+        />
+      ) : (
+        <p>No hay árbol disponible para este proyecto.</p>
+      )}
     </div>
   );
 };

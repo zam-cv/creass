@@ -1,5 +1,7 @@
 from fastapi import FastAPI
-from routes import receive
+from websocket import server  # Importar el servidor del socket
 
 app = FastAPI()
-app.include_router(receive.receive_router, prefix="/api", tags=["receive"])
+
+# Incluir el WebSocket
+app.add_api_websocket_route("/ws", server.websocket_endpoint)  # Integrar el WebSocket en la app principal

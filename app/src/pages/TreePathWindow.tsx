@@ -6,14 +6,6 @@ export default function TreePathWindow() {
   const [isTreeOpen, setIsTreeOpen] = useState(false);
   const { theme } = useTheme();
 
-  const handleOpenTree = () => {
-    setIsTreeOpen(true);
-  };
-
-  const handleCloseTree = () => {
-    setIsTreeOpen(false);
-  };
-
   return (
     <div className="flex justify-center items-center min-h-auto">
       <div

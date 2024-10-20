@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { LayoutGrid, Network } from "lucide-react";
+import { LayoutGrid, Network, Home as HomeIcon } from "lucide-react";
 import MyProjects from "./MyProjects";
 import Board from "../components/Board";
 import CloseButton from "../components/ui/CloseButton";
@@ -36,6 +36,11 @@ const HomeContent: React.FC = () => {
     setIsTreeOpen(false);
   };
 
+  const handleGoHome = () => {
+    localStorage.removeItem("selectedProject");
+    setSelectedProject(null);
+  };
+
   return (
     <div
       className={`${
@@ -45,21 +50,19 @@ const HomeContent: React.FC = () => {
       <header className="h-[8vh]">
         <div className="flex justify-between items-center">
           <div className="order-first pl-5 pt-3">
-            <div className="flex items-center justify-center space-x-2">
+            <div className="flex items-center justify-center space-x-3">
+              <HomeIcon
+                size={35}
+                onClick={handleGoHome}
+                className="cursor-pointer"
+                color={theme === "dark" ? "white" : "black"}
+              />
               <LayoutGrid
                 size={35}
                 onClick={handleOpenModal}
                 className="cursor-pointer"
                 color={theme === "dark" ? "white" : "black"}
               />
-              {selectedProject && ( // Mostrar el icono de Network solo si hay un proyecto seleccionado
-                <Network
-                  size={35}
-                  onClick={handleOpenTree}
-                  className="cursor-pointer"
-                  color={theme === "dark" ? "white" : "black"}
-                />
-              )}
             </div>
           </div>
           <div className="flex items-center justify-center mt-2">
@@ -71,7 +74,15 @@ const HomeContent: React.FC = () => {
               {selectedProject ? selectedProject : "Home"}
             </h1>
           </div>
-          <div className="order-last pr-5 pt-3">
+          <div className="flex items-center justify-center order-last pr-5 pt-3 space-x-3">
+            {selectedProject && (
+              <Network
+                size={35}
+                onClick={handleOpenTree}
+                className="cursor-pointer"
+                color={theme === "dark" ? "white" : "black"}
+              />
+            )}
             <ThemeSwitch />
           </div>
         </div>

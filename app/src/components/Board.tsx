@@ -3,6 +3,7 @@ import TextField from "./ui/Textfield";
 import PostIt from "./PostIt";
 import Draggable from "react-draggable";
 import { useTheme } from "../contexts/ThemeContext";
+import TreeProvider, { useTree } from "../contexts/TreeContext";
 
 interface PostitPosition {
   id: number;
@@ -10,12 +11,33 @@ interface PostitPosition {
   y: number;
 }
 
+interface Node {
+  id: number;
+  context: string;
+  children: Node[];
+}
+
+function saveLog(message: string) {
+  const logs = localStorage.getItem("logs");
+  const logArray = logs ? JSON.parse(logs) : [];
+
+  logArray.push({ message });
+
+  localStorage.setItem("logs", JSON.stringify(logArray));
+
+  console.log(message);
+}
+
+let nextNodeId = Number(localStorage.getItem("nextNodeId") || 1);
+
 const BoardContent: React.FC = () => {
   const [postitPositions, setPostitPositions] = useState<PostitPosition[]>([]);
   const [messageSent, setMessageSent] = useState(false);
   const { theme } = useTheme();
   const [isHome, setIsHome] = useState<boolean>(true);
   const [projectTitle, setProjectTitle] = useState("Cre-As");
+  const [selectedNodeId, setSelectedNodeId] = useState<number | null>(null);
+  const [treeData, setTreeData] = useState<Node | null>(null);
 
   // Info muestra
   const sampleData = [
@@ -133,21 +155,75 @@ const BoardContent: React.FC = () => {
 
         const newProjectName = message;
         const updatedProjects = [...projects, newProjectName];
+
+        const newTreeRoot = {
+          id: nextNodeId++,
+          context: newProjectName,
+          children: [],
+        };
+        localStorage.setItem("nextNodeId", String(nextNodeId));
+
+        localStorage.setItem("tree", JSON.stringify(newTreeRoot));
         localStorage.setItem("projects", JSON.stringify(updatedProjects));
         localStorage.setItem("selectedProject", newProjectName);
+
         setProjectTitle(newProjectName);
+        setTreeData(newTreeRoot);
+        setSelectedNodeId(newTreeRoot.id);
+        setIsHome(false);
+        setMessageSent(false);
         window.location.reload();
       } else {
+        const loadedTree = localStorage.getItem("tree");
+
+        if (loadedTree) {
+          const currentTree = JSON.parse(loadedTree);
+
+          const addChildrenToNode = (node: Node) => {
+            if (node.id === selectedNodeId) {
+              sampleData.forEach((text) => {
+                const childNode: Node = {
+                  id: nextNodeId++,
+                  context: text,
+                  children: [],
+                };
+                localStorage.setItem("nextNodeId", String(nextNodeId));
+                node.children.push(childNode);
+                saveLog("Adding Post-It to node: " + text);
+              });
+            } else {
+              node.children.forEach((child) => addChildrenToNode(child));
+            }
+          };
+
+          addChildrenToNode(currentTree);
+          localStorage.setItem("tree", JSON.stringify(currentTree));
+          setTreeData(currentTree);
+        }
+
         setMessageSent(true);
         generatePostitPositions();
       }
     }
   };
 
-  const handlePostItClick = (postItText: string) => {
+  const handlePostItClick = (postItText: string, nodeId: number) => {
     setProjectTitle(postItText);
     setPostitPositions([]);
+    setSelectedNodeId(nodeId);
   };
+
+  useEffect(() => {
+    const storedTree = localStorage.getItem("tree");
+    if (storedTree) {
+      const parsedTree = JSON.parse(storedTree);
+      setTreeData(parsedTree);
+      if (isHome) {
+        setSelectedNodeId(parsedTree.id);
+        setIsHome(false);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const selectedProject = localStorage.getItem("selectedProject");
@@ -160,7 +236,36 @@ const BoardContent: React.FC = () => {
     if (!isHome || messageSent) {
       generatePostitPositions();
     }
+
+    const storedTree = localStorage.getItem("tree");
+    if (storedTree) {
+      setTreeData(JSON.parse(storedTree));
+    }
   }, [theme, messageSent]);
+
+  useEffect(() => {
+    if (messageSent) {
+      generatePostitPositions();
+    }
+  }, [messageSent]);
+
+  const getCurrentPostIts = () => {
+    const postIts: Node[] = [];
+
+    const findNodeById = (node: Node) => {
+      if (node.id === selectedNodeId) {
+        postIts.push(...node.children);
+      } else {
+        node.children.forEach((child) => findNodeById(child));
+      }
+    };
+
+    if (treeData) {
+      findNodeById(treeData);
+    }
+
+    return postIts;
+  };
 
   return (
     <div className="relative w-full h-[92vh]">
@@ -178,24 +283,37 @@ const BoardContent: React.FC = () => {
       </div>
 
       {messageSent &&
-        postitPositions.map((position, index) => (
-          <Draggable
-            key={index}
-            defaultPosition={{ x: position.x, y: position.y }}
-            bounds="parent"
-          >
-            <div className="absolute">
-              <PostIt
-                title={sampleData[index % sampleData.length]}
-                onClick={() =>
-                  handlePostItClick(sampleData[index % sampleData.length])
-                } // Maneja el clic en cada post-it
-              />
-            </div>
-          </Draggable>
-        ))}
+        postitPositions.map((position, index) => {
+          const postIts = getCurrentPostIts();
+          if (index >= postIts.length) return null;
+
+          return (
+            <Draggable
+              key={postIts[index].id}
+              defaultPosition={{ x: position.x, y: position.y }}
+              bounds="parent"
+            >
+              <div className="absolute">
+                <PostIt
+                  title={postIts[index].context}
+                  onClick={() =>
+                    handlePostItClick(postIts[index].context, postIts[index].id)
+                  }
+                />
+              </div>
+            </Draggable>
+          );
+        })}
     </div>
   );
 };
 
-export default BoardContent;
+const Board: React.FC = () => {
+  return (
+    <TreeProvider>
+      <BoardContent />
+    </TreeProvider>
+  );
+};
+
+export default Board;
