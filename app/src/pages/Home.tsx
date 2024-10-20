@@ -52,7 +52,7 @@ const HomeContent: React.FC = () => {
                 className="cursor-pointer"
                 color={theme === "dark" ? "white" : "black"}
               />
-              {selectedProject && ( // Mostrar el icono de Network solo si hay un proyecto seleccionado
+              {selectedProject && (
                 <Network
                   size={35}
                   onClick={handleOpenTree}
